@@ -5,7 +5,9 @@
   <title>Animated United States map made with Raphael</title>  
   
   <style type="text/css">
-  	
+  	body {
+  		background-color:#f6f6f6;
+  	}
   	
   	div#dialog {
   		display:block;
@@ -30,6 +32,7 @@
 	  <h1>{{name}}</h1>
 	  <h3>Email:</h3>
 	  <p>{{email}}</p>
+	  <img src="placeholder.jpg"/>
 	</div>
 </script>
 
@@ -43,24 +46,86 @@
   	1 : {
   		name : "Person 1",
   		email : "person1@host.com",
-  		states : ["al", "hi", "wa", "or", "ca", "id", "nv", "az", "mt", "wy", "co", "co"]
+  		states : [ "ak",
+  				   "hi", 
+  				   "wa", 
+  				   "or", 
+  				   "ca", 
+  				   "id", 
+  				   "nv", 
+  				   "az", 
+  				   "mt", 
+  				   "wy", 
+  				   "co", 
+  				   "co",
+  				   "ut",
+  				   "nm"]
   	},
   	2 : {
   		name: "Person 2",
   		email : "person2@host.com",
-  		states : [ "ks", "ok", "tx", "nd", "sd", "ne", "mn", "ia", "mo", "ar", "la" ]
+  		states : [ "ks", 
+  				   "ok", 
+  				   "tx", 
+  				   "nd", 
+  				   "sd", 
+  				   "ne", 
+  				   "mn", 
+  				   "ia", 
+  				   "mo", 
+  				   "ar", 
+  				   "la"
+  				  ]
   	},
   	3 : {
   		name : "Person 3",
   		email : "person3@host.com",
-  		states : ["wi", "il", "ms", "mi", "ind", "ky", "tn", "al", "oh", "ga", "fl"]	
+  		states : [ "wi",
+  				   "il",
+  				   "ms",
+  				   "mi",
+  				   "ind",
+  				   "ky",
+  				   "tn",
+  				   "al", 
+  				   "oh",
+  				   "ga",
+  				   "fl"
+  				  ]	
   	},
   	4 : {
   		name : "Person 4",
   		email : "person4@host.com",
-  		states : ["ny", "pa", "md", "wv", "va", "nc", "sc", "me", "nh", "vt", "ma", "ri", "ct"]
+  		states : [ "ny",
+  				   "pa",
+  				   "md",
+  				   "wv",
+  				   "va",
+  				   "nc",
+  				   "sc",
+  				   "me",
+  				   "nh",
+  				   "vt",
+  				   "ma",
+  				   "ri",
+  				   "ct",
+  				   "nj",
+  				   "de"
+  				  ]
   	}
   }
+
+
+  officerLookup = {}
+  
+  for ( var officer in officerCollection ) {
+  	
+  	for ( var state in officerCollection[officer].states){
+  		officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer] ;
+  	}(officerCollection, officerLookup)
+  	
+  }(officerCollection, officerLookup)
+  
 
   window.onload = function () {
     var R = Raphael("container", 1000, 900),
@@ -77,9 +142,12 @@
     
     //Draw Map and store Raphael paths
     for (var state in usMap) {
+	  var officer = officerLookup[state];
+	  
       var path = R.path(usMap[state]).attr(attr);
       path.name = state;
       usRaphael[state] = path;
+      //officer.states[state] =
     }
     
     //Do Work on Map
@@ -107,13 +175,32 @@
 		}
 		
         st[0].onmouseover = function () {
-          st.animate({fill: st.color}, 500);
+          st.animate({fill: "#777777" }, 500);
+          
+          var nstate = this.raphael.name;
+          
+          var officer = officerLookup[nstate];
+          
+          for(state in officer.states){
+          	if ( officer.states[state] != nstate ){
+          	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 500);
+          	}
+          }
+          
           st.toFront();
           R.safari();
         };
 
         st[0].onmouseout = function () {
-          st.animate({fill: "#d3d3d3"}, 500);
+        	
+          var nstate = this.raphael.name;
+          
+          var officer = officerLookup[nstate];
+          
+          for(state in officer.states){
+          	usRaphael[ officer.states[state] ].animate({fill: "#d3d3d3"}, 500);
+          }
+
           st.toFront();
           R.safari();
         };
@@ -122,16 +209,6 @@
     }
             
   };
-  
-  officerLookup = {}
-  
-  for ( var officer in officerCollection ) {
-  	
-  	for ( var state in officerCollection[officer].states){
-  		officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer] ;
-  	}(officerCollection, officerLookup)
-  	
-  }(officerCollection, officerLookup)
   
 </script>
 </body>
