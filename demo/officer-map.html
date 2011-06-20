@@ -16,6 +16,7 @@
   		right:0px;
   		top:100px;
   	}
+
   </style>
 </head>
 <body>
@@ -129,6 +130,17 @@
   	
   	for ( var state in officerCollection[officer].states){
   		officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer] ;
+  	}(officerCollection, officerLookup)
+  	
+  }(officerCollection, officerLookup)
+  
+  sectionLookup = paper.set();
+  
+  for ( var officer in officerCollection ) {
+      
+  	for ( var state in officerCollection[officer].states){
+        
+  		sectionLookup.push( usRaphael[sectionLookup[ officerCollection[officer].states[state] ] ] );
   	}(officerCollection, officerLookup)
   	
   }(officerCollection, officerLookup)
