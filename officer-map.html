@@ -105,7 +105,9 @@
       usRaphael[state].color = Raphael.getColor();
       
       (function (st, state) {
-
+        
+        current = null;
+        
         st[0].style.cursor = "pointer";
 		
 		st[0].onmousedown = function() {
