@@ -18,10 +18,47 @@
   		right:0px;
   		top:100px;
   	}
+      
+#modal:target {
+    display: table;
+    height: 100%;
+}
+
+#modal {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);
+    display: none;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+#modal h1, #modal p {
+    width:500px;
+    display:block;
+    margin:0 auto;
+}
+
+#modal a {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
   </style>
 </head>
 <body>
-  
+
+<div id="modal">
+<a href="#close">
+    <h1> Select your state and country* to find an admissions counselor that represents your area.</h1>
+    <p>*Applicable only to Michigan residents.</p>
+    <p>Please note that these territories are non-exclusive. Any member of ourstaff is qualified and willing to assist you.</p>
+</a>
+</div>
+
 <div id="container"></div>
 
 <div id="dialog"></div>
@@ -133,10 +170,10 @@
               var officer = officerLookup[nstate];
               
               for(state in officer.states){
-              	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 250);
+              	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 100);
               }
     
-              st.animate({fill: "#777777" }, 250);
+              st.animate({fill: "#777777" }, 100);
     
               st.toFront();
               R.safari();
@@ -150,7 +187,7 @@
           var officer = officerLookup[nstate];
           
           for(stte in usRaphael){
-              usRaphael[ stte ].animate({fill: "#d3d3d3"}, 50);
+              usRaphael[ stte ].animate({fill: "#d3d3d3"}, 100);
           }
 
           st.toFront();
