@@ -137,7 +137,7 @@
           R.safari();
         };
 
-        st[0].onmouseout = function () {
+        st[0].attachEvent( onmouseout, function () {
         	
           var nstate = this.raphael.name;
           
@@ -150,7 +150,7 @@
 
           st.toFront();
           R.safari();
-        };
+        });
                    
       })(usRaphael[state], state);
     };
