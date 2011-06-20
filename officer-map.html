@@ -40,92 +40,30 @@
 <script src="handlebars.js"></script>
 <script src="raphael-min.js"></script>
 <script src="us-map-svg.js"></script>
-<script>
+<script type="text/javascript">
   
   officerCollection = {
   	1 : {
   		name : "Person 1",
   		email : "person1@host.com",
-  		states : [ "ak",
-  				   "hi", 
-  				   "wa", 
-  				   "or", 
-  				   "ca", 
-  				   "id", 
-  				   "nv", 
-  				   "az", 
-  				   "mt", 
-  				   "wy", 
-  				   "co", 
-  				   "co",
-  				   "ut",
-  				   "nm"]
+  		states : [ "ak","hi", "wa", "or", "ca", "id","nv","az","mt","wy","co","ut","nm" ]
   	},
   	2 : {
   		name: "Person 2",
   		email : "person2@host.com",
-  		states : [ "ks", 
-  				   "ok", 
-  				   "tx", 
-  				   "nd", 
-  				   "sd", 
-  				   "ne", 
-  				   "mn", 
-  				   "ia", 
-  				   "mo", 
-  				   "ar", 
-  				   "la"
-  				  ]
+  		states : [ "ks","ok","tx","nd","sd","ne","mn","ia","mo","ar","la" ]
   	},
   	3 : {
   		name : "Person 3",
   		email : "person3@host.com",
-  		states : [ "wi",
-  				   "il",
-  				   "ms",
-  				   "mi",
-  				   "ind",
-  				   "ky",
-  				   "tn",
-  				   "al", 
-  				   "oh",
-  				   "ga",
-  				   "fl"
-  				  ]	
+  		states : [ "wi","il","ms","mi","ind","ky","tn","al","oh","ga","fl" ]	
   	},
   	4 : {
   		name : "Person 4",
   		email : "person4@host.com",
-  		states : [ "ny",
-  				   "pa",
-  				   "md",
-  				   "wv",
-  				   "va",
-  				   "nc",
-  				   "sc",
-  				   "me",
-  				   "nh",
-  				   "vt",
-  				   "ma",
-  				   "ri",
-  				   "ct",
-  				   "nj",
-  				   "de"
-  				  ]
+  		states : [ "ny","pa","md","wv","va","nc","sc","me","nh","vt","ma","ri","ct","nj","de" ]
   	}
   }
-
-
-  officerLookup = {}
-  
-  for ( var officer in officerCollection ) {
-  	
-  	for ( var state in officerCollection[officer].states){
-  		officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer] ;
-  	}(officerCollection, officerLookup)
-  	
-  }(officerCollection, officerLookup)
-  
 
   window.onload = function () {
     var R = Raphael("container", 1000, 900),
@@ -137,8 +75,19 @@
       "stroke-miterlimit": "4",
       "stroke-width": "0.75",
       "stroke-dasharray": "none"
-    },
+    };
+    
     usRaphael = {};
+    
+    officerLookup = {};
+      
+    for ( var officer in officerCollection ) {
+        
+        for ( var state in officerCollection[officer].states){
+            officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer] ;
+        }(officerCollection, officerLookup)
+          
+      }(officerCollection, officerLookup)
     
     //Draw Map and store Raphael paths
     for (var state in usMap) {
@@ -148,7 +97,8 @@
       path.name = state;
       usRaphael[state] = path;
       //officer.states[state] =
-    }
+    };
+  
     
     //Do Work on Map
     for (var state in usRaphael) {
@@ -174,20 +124,15 @@
 			
 		}
 		
-        st[0].onmouseover = function () {
-          st.animate({fill: "#777777" }, 250);
-
-          
+        st[0].onmouseover = function () {          
           var nstate = this.raphael.name;
-          
           var officer = officerLookup[nstate];
-          
           for(state in officer.states){
-          	if ( officer.states[state] != nstate ){
           	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 250);
-          	}
           }
-          
+
+          st.animate({fill: "#777777" }, 255);
+
           st.toFront();
           R.safari();
         };
@@ -207,10 +152,8 @@
         };
                    
       })(usRaphael[state], state);
-    }
-            
-  };
-  
+    };
+  }
 </script>
 </body>
 </html>
