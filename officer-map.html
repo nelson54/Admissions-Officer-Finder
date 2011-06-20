@@ -128,10 +128,11 @@
           var nstate = this.raphael.name;
           var officer = officerLookup[nstate];
           for(state in officer.states){
+              usRaphael[ officer.states[state] ].stop();
           	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 250);
           }
-
-          st.animate({fill: "#777777" }, 255);
+          usRaphael[ officer.states[state] ].stop();
+          st.animate({fill: "#777777" }, 50);
 
           st.toFront();
           R.safari();
@@ -144,6 +145,7 @@
           var officer = officerLookup[nstate];
           
           for(state in officer.states){
+            usRaphael[ officer.states[state] ].stop();
           	usRaphael[ officer.states[state] ].animate({fill: "#d3d3d3"}, 250);
           }
 
