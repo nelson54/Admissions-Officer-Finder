@@ -123,6 +123,19 @@
 			//alert(officer.name);
 			
 		}
+        
+        st[0].onmouseout = function () {
+          var nstate = this.raphael.name;
+          
+          var officer = officerLookup[nstate];
+          
+          for(stte in usRaphael){
+              usRaphael[ stte ].animate({fill: "#d3d3d3"}, 50);
+          }
+
+          st.toFront();
+          R.safari();
+        };
 		
         st[0].onmouseover = function () {          
           var nstate = this.raphael.name;
@@ -137,19 +150,6 @@
           }
 
           st.animate({fill: "#777777" }, 50);
-
-          st.toFront();
-          R.safari();
-        };
-
-      st[0].onmouseout = function () {
-          var nstate = this.raphael.name;
-          
-          var officer = officerLookup[nstate];
-          
-          for(stte in usRaphael){
-          	usRaphael[ stte ].animate({fill: "#d3d3d3"}, 50);
-          }
 
           st.toFront();
           R.safari();
