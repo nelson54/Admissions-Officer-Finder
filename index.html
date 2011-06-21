@@ -94,19 +94,60 @@ div#dialog {
 }
 
 .officer {
-    position:relative;
-    z-index:1001;
-    width:500px;
-    background-color:#fff;
-    margin:20px auto;
+    position: relative;
+    z-index: 1001;
+    width: 508px;
+    background-color: white;
+    margin: 20px auto;
+    display: table;
+    border: 3px solid #DDD;
+    
+    top:50px;
+    
+    }
+
+.officer-head {
+    padding-top:20px;
     }
 
 .officer-head img {
     float:left;
+    padding: 0px 0px 0px 20px;
+    }
+    
+.officer-head p.territory {
+    font-size:8pt;
     }
 
-.officer-head h1 {
+.officer h1 {
+    margin-bottom: 10px;
+    line-height: .8;
+    }
     
+.officer h2 {
+    font-size:9pt;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-weight:normal;
+    color:#777;
+    }
+    
+.officer h3 {
+    font-size:9pt;
+    font-weight:bold;
+    color:#777;
+    }
+    
+.officer h4 {
+    font-size:8pt;
+    font-weight:bold;
+    color:#777;
+    }
+    
+.officer p {
+    font-size: 9pt;
+    margin-bottom: 7px;
+    color:#777;
     }
     
 .office-head-bottom {
@@ -116,7 +157,7 @@ div#dialog {
     
 .office-head-right {
     display: block;
-    width: 375px;
+    width: 355px;
     float: right;
     }
 
@@ -191,7 +232,7 @@ div#no-menu-content {
         	    <h2>{{title}}</h2>
         	    <p>Contact {{firstname}} at <a href="mailto:{{email}}">{{email}}</a></p>
                 <h4>Territory:</h4>
-        	    <p>{{territorys}}</p>
+        	    <p class="territory">{{territorys}}</p>
             </div>
         </div>
         <div class="office-head-bottom">
