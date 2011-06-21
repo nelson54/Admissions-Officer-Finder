@@ -364,8 +364,12 @@ div#no-menu-content {
               for(state in officer.states){
               	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 100);
               }
-    
-              st.animate({fill: "#777777" }, 100);
+              
+              if ( this.raphael.name == "mi" ){
+                st.animate({fill: "#cc0033" }, 100);
+              } else {
+                st.animate({fill: "#777777" }, 100);
+              }
     
               st.toFront();
               R.safari();
