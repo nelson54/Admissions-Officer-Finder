@@ -101,6 +101,25 @@ div#dialog {
     margin:20px auto;
     }
 
+.officer-head img {
+    float:left;
+    }
+
+.officer-head h1 {
+    
+    }
+    
+.office-head-bottom {
+    display:block;
+    float:left;
+    }
+    
+.office-head-right {
+    display: block;
+    width: 375px;
+    float: right;
+    }
+
 div#no-menu-content {
     position:relative;
     height: 600px;
@@ -167,17 +186,18 @@ div#no-menu-content {
         <div class="officer">
         <div class="officer-head">
             <img src="placeholder.jpg"/>
-            <h1>{{fullname}}</h1>
-        	<h2>{{title}}</h2>
-        
-        	<p>Contact {{firstname}} at <a href="mailto:{{email}}">{{email}}</a></p>
-        
-        	<h4>Territory:</h4>
-        	<p>{{territorys}}</p>
+            <div class="office-head-right">
+                <h1>{{fullname}}</h1>
+        	    <h2>{{title}}</h2>
+        	    <p>Contact {{firstname}} at <a href="mailto:{{email}}">{{email}}</a></p>
+                <h4>Territory:</h4>
+        	    <p>{{territorys}}</p>
+            </div>
         </div>
-    
-    	<h3>{{question}}</h3>
-    	<p>{{answer}}</p>
+        <div class="office-head-bottom">
+        	<h3>{{question}}</h3>
+        	<p>{{answer}}</p>
+        </div>
         </div>
     </div>
 </script>
