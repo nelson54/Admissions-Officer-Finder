@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Animated United States map made with Raphael</title>  
+  
+  <style type="text/css">
+  	body {
+  		background-color:#f6f6f6;
+  	}
+  	
+div#dialog {
+  		display:block;
+  		width:300px;
+  		height:300px;
+  		background-color:white;
+  		position:absolute;
+  		right:0px;
+  		top:100px;
+  	}
+      
+.modal:target {
+    display: table;
+    height: 100%;
+}
+
+.modal {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
+    display: none;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.modal h1, .modal p {
+    width:500px;
+    display:block;
+    margin:0 auto;
+}
+
+.modal a {
+    display: table-cell;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    vertical-align: middle;
+    position:absolute;
+    z-index:1000;
+}
+
+.officer {
+    position:relative;
+    z-index:1001;
+    width:500px;
+    background-color:#fff;
+    margin:20px auto;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="modal" id="title">
+    <a href="#close">
+        <h1> Select your state and country* to find an admissions counselor that represents your area.</h1>
+        <p>*Applicable only to Michigan residents.</p>
+        <p>Please note that these territories are non-exclusive. Any member of ourstaff is qualified and willing to assist you.</p>
+    </a>
+</div>
+
+<div class="modal" id="person1">
+    <a href="#close"></a>
+    <div class="officer">
+        <div class="officer-head">
+            <img src="placeholder.jpg"/>
+            <h1>Paul Kwan</h1>
+            <h2>SENIOR RECRUITING OFFICE</h2>
+            
+            <p>Contact Paul at kwantp@ferris.edu</p>
+            
+            <h4>Territory:</h4>
+            <p>Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, 
+            Tuscola, Arenac, Clare, Isabella, Montcalm & the states of 
+            Kentucky, Tennessee, New York</p>
+        </div>
+        <h3>Why did you pick Ferris?</h3>
+        <p>I selected Ferris as my Alma matter because of the practical educational opportunities the 
+        school provides. Ferris State University offers many innovative majors, small classes and 
+        hands-on teaching. I am proud that we are focused on assisting students with their career 
+        goals. Ferris State University has played an important role in my family history. My father 
+        worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all 
+        attended Ferris as students as well</p>
+    </div>
+</div>
+
+
+<div id="container"></div>
+
+<div id="dialog"></div>
+
+
+
+<!-- /container -->  
+
+<script id="officer-template" type="text/x-handlebars-template">
+    <div class="modal" id="{{id}}">
+        <div class="officer-head">
+            <img src="placeholder.jpg"/>
+            <h1>{{fullname}}</h1>
+        	<h2>{{title}}</h2>
+        
+        	<p>Contact {{firstname}} at <a href="mailto:{{email}}">{{email}}</a></p>
+        
+        	<h4>Territory:</h4>
+        	<p>{{territorys}}</p>
+            
+    
+    	<h3>{{question}}</h3>
+    	<p>{{answer}}</p>
+    </div>
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script src="handlebars.js"></script>
+<script src="raphael-min.js"></script>
+<script src="us-map-svg.js"></script>
+<script type="text/javascript">
+  
+    1 : {
+		id : "Paul_Kwant",
+  		fullname : "Paul Kwant",
+		firstname : "Paul",
+		title : "SENIOR RECRUITING OFFICER",
+  		email : "person1@host.com",
+  		states : [ "ak","hi", "wa", "or", "ca", "id","nv","az","mt","wy","co","ut","nm" ]
+		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
+		question : "Why did you pick Ferris",
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
+	},
+  	2 : {
+  		name: "Person 2",
+  		email : "person2@host.com",
+  		states : [ "ks","ok","tx","nd","sd","ne","mn","ia","mo","ar","la" ]
+  	},
+  	3 : {
+  		name : "Person 3",
+  		email : "person3@host.com",
+  		states : [ "wi","il","ms","mi","ind","ky","tn","al","oh","ga","fl" ]	
+  	},
+  	4 : {
+  		name : "Person 4",
+  		email : "person4@host.com",
+  		states : [ "ny","pa","md","wv","va","nc","sc","me","nh","vt","ma","ri","ct","nj","de" ]
+  	}
+  }
+
+  window.onload = function () {
+    var R = Raphael("container", 1000, 900),
+      attr = {
+      "fill": "#d3d3d3",
+      "stroke": "#fff",
+      "stroke-opacity": "1",
+      "stroke-linejoin": "round",
+      "stroke-miterlimit": "4",
+      "stroke-width": "0.75",
+      "stroke-dasharray": "none"
+    };
+    
+    usRaphael = {};
+    
+    officerLookup = {};
+      
+    for ( var officer in officerCollection ) {
+        
+        for ( var state in officerCollection[officer].states){
+            officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer] ;
+        }(officerCollection, officerLookup)
+          
+      }(officerCollection, officerLookup)
+    
+    //Draw Map and store Raphael paths
+    for (var state in usMap) {
+	  var officer = officerLookup[state];
+	  
+      var path = R.path(usMap[state]).attr(attr);
+      path.name = state;
+      usRaphael[state] = path;
+      //officer.states[state] =
+    };
+  
+    
+    //Do Work on Map
+    for (var state in usRaphael) {
+      usRaphael[state].color = Raphael.getColor();
+      
+      (function (st, state) {
+        
+        current = null;
+        
+        st[0].style.cursor = "pointer";
+		
+		st[0].onmousedown = function() {
+			var state = this.raphael.name;
+			var officer = officerLookup[state];
+			
+			var source   = $("#officer-template").html();
+			var template = Handlebars.compile(source);
+            
+			var context = { name: officer.name, email: officer.email }
+			var html    = template(context)
+			$('div#dialog').empty();
+			$('div#dialog').append(html);
+            
+            location.hash = officer.id;
+			
+			//alert(officer.name);
+			
+		};
+		
+        st[0].onmouseover = function () {
+          if (current != this.raphael.name) {
+              current = this.raphael.name;
+              var nstate = this.raphael.name;
+              var officer = officerLookup[nstate];
+              
+              for(state in officer.states){
+              	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 100);
+              }
+    
+              st.animate({fill: "#777777" }, 100);
+    
+              st.toFront();
+              R.safari();
+           }
+        };
+        
+        st[0].onmouseout = function () {
+          current = null;
+          var nstate = this.raphael.name;
+          
+          var officer = officerLookup[nstate];
+          
+          for(stte in usRaphael){
+              usRaphael[ stte ].animate({fill: "#d3d3d3"}, 100);
+          }
+
+          st.toFront();
+          R.safari();
+        };
+                   
+      })(usRaphael[state], state);
+    };
+  }
+</script>
+</body>
+</html>
