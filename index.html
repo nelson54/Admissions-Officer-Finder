@@ -189,6 +189,17 @@ div#no-menu-content {
 
 
 
+#drilldowndiv {
+	margin: 10px 0 30px 30px;
+	display: block;
+	padding: 15px;
+	width: 400px;
+	background-color: #E7E7E7;
+	}
+	
+#drilldowndiv #drillDown {
+	margin: 0 auto;
+}
 
 </style>
 
@@ -247,7 +258,9 @@ div#no-menu-content {
 </html>
 
 <script id="drilldown-form-template" type="text/x-handlebars-template">
+	<div id="drilldowndiv">
 	<form id="drillDown">
+
 
 	    <select name="states">
 	    	<option value="none">&nbsp;</option>
@@ -264,7 +277,9 @@ div#no-menu-content {
 	    </select>
 
 	    <input type="submit" value="Find your officer" />
+
     </form>
+    </div>
 </script>
 
 <script id="officer-template" type="text/x-handlebars-template">
