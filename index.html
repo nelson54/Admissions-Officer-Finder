@@ -558,6 +558,7 @@ var stateList = { states : [
 		title : "SENIOR RECRUITING OFFICER",
   		email : "person1@host.com",
   		states : [ "ak","hi", "wa", "or", "ca", "id","nv","az","mt","wy","co","ut","nm" ],
+    	counties : [ "Alcona", "Alger", "Allegan", "Alpena", "Antrim", "Arenac", "Baraga", "Barry", "Bay", "Benzie", "Berrien", "Branch", "Calhoun", "Cass", "Charlevoix", "Cheboygan", "Chippewa", "Clare", "Clinton", "Crawford", "Delta", "Dickinson", "Eaton", "Emmet", "Genesee", "Gladwin", "Gogebic", "Grand Traverse", "Gratiot", "Hillsdale", "Houghton", "Huron", "Ingham", "Ionia", "Iosco", "Iron", "Isabella", "Jackson", "Kalamazoo", "Kalkaska", "Kent", "Keweenaw", "Lake", "Lapeer", "Leelanau", "Lenawee", "Livingston", "Luce", "Mackinac", "Macomb", "Manistee", "Marquette", "Mason", "Mecosta", "Menominee", "Midland", "Missaukee", "Monroe", "Montcalm", "Montmorency", "Muskegon", "Newaygo", "Oakland", "Oceana", "Ogemaw", "Ontonagon", "Osceola", "Oscoda", "Otsego", "Ottawa", "Presque Isle", "Roscommon", "Saginaw", "Sanilac", "Schoolcraft", "Shiawassee", "St. Clair", "St. Joseph", "Tuscola", "Van Buren", "Washtenaw", "Wayne", "Wexford" ],
 		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
 		question : "Why did you pick Ferris",
 		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
@@ -627,6 +628,27 @@ var stateList = { states : [
 	
 	$("form#drillDown select[name='states']").change(function(){
 		renderDrillDownForm($("form#drillDown select[name='states']").val());
+		
+		var state = $("form#drillDown select[name='states']").val().toLowerCase();
+		
+		for(stte in usRaphael){
+           usRaphael[ stte ].animate({fill: "#d3d3d3"}, 100);
+        }
+		
+		if (state === "mi"){
+			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#cc0033"}, 100);
+		} else {
+			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#777"}, 100);
+		}
+
+	});
+	
+	$("form#drillDown").submit(function(){
+		var state = $("form#drillDown select[name='counties']").val();
+		var officer = officerLookup[state];
+            
+        location.hash = officer.id;
+        return false;
 	});
   }
 
@@ -663,7 +685,11 @@ var stateList = { states : [
         for ( var state in officerCollection[officer].states){
             officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer];
         }(officerCollection, officerLookup)
-          
+        
+        for ( var county in officerCollection[officer].counties){
+            officerLookup[ officerCollection[officer].counties[county] ] = officerCollection[officer];
+        }(officerCollection, officerLookup)
+        
       }(officerCollection, officerLookup)
     
     //Draw Map and store Raphael paths
