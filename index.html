@@ -42,7 +42,6 @@ div#dialog {
 }
 
 .modal {
-    background: none repeat scroll 0 0 rgba(256, 256, 256, 0.7);
     display: none;
     height: 635px;
     left: 0;
@@ -61,7 +60,9 @@ div#dialog {
     margin:0 auto;
     text-align:center;
     color:#c03;
-	font-family: arial, Helvetica,sans-serif; 
+	font-family: arial, Helvetica,sans-serif;
+    position:relative;
+    z-index: 1001;
 }
 
 #title h1 {
@@ -89,6 +90,17 @@ div#dialog {
     position:absolute;
     top:0px;
     z-index:1000;
+    background: none repeat scroll 0 0 rgba(256, 256, 256, 0.7);
+}
+
+.modal-form{
+	position: relative;
+	z-index: 1001;
+	background-color: white;
+	top: 50px;
+	padding: 20px;
+	margin: 20px auto;
+	display: table;
 }
 
 .officer {
@@ -279,6 +291,22 @@ div#no-menu-content {
 	    <input type="submit" value="Find your officer" />
 
     </form>
+    </div>
+</script>
+
+<script id="modal-form-template" type="text/x-handlebars-template">
+    <div class="modal" id="modal-form">
+        <a class="close" href="#close"></a>
+        <div class="modal-form">
+        	<form id="modal-form-county-search">
+		    <select name="counties">
+		    	<option value="none">&nbsp;</option>
+				{{#each county}}
+				<option value="{{this}}">{{this}}</option>
+				{{/each}}
+		    </select>
+		    </form>
+        </div>
     </div>
 </script>
 
@@ -606,6 +634,30 @@ var stateList = { states : [
   	return (StateAbbrLookUp);
   }
   
+  function michiganModal(){
+  	var drillDownSource   = $("#modal-form-template").html();
+	var drillDownTemplate = Handlebars.compile(drillDownSource);
+	var drillDownContext = {};
+	
+	drillDownContext['county'] = stateAbbrLookUp["MI"]["counties"];
+	var drillDownHtml = drillDownTemplate(drillDownContext);
+	
+	$("#modals").prepend( drillDownHtml );
+	
+	location.hash = "modal-form";
+	
+	$("form#modal-form-county-search select[name='counties']").change(function(){
+		var item = $("form#modal-form-county-search select[name='counties']").val();
+		
+		var officer = officerLookup[item];
+		location.hash = officer.id;
+		
+		return false;
+	})
+	
+	return false;
+  }
+  
   function renderDrillDownForm(state){
   	var drillDownSource   = $("#drilldown-form-template").html();
 	var drillDownTemplate = Handlebars.compile(drillDownSource);
@@ -619,7 +671,7 @@ var stateList = { states : [
 	}
 	
 	var drillDownHtml = drillDownTemplate(drillDownContext);
-	$("form#drillDown").remove();
+	$("#drilldowndiv").remove();
 	$("#no-menu-content").prepend( drillDownHtml );
 	
 	if (state){
@@ -644,10 +696,18 @@ var stateList = { states : [
 	});
 	
 	$("form#drillDown").submit(function(){
-		var state = $("form#drillDown select[name='counties']").val();
-		var officer = officerLookup[state];
-            
-        location.hash = officer.id;
+		var item = $("form#drillDown select[name='counties']").val();
+		
+		if (item === "none"){
+			var item = $("form#drillDown select[name='states']").val().toLowerCase();
+		}
+		
+		if (item != "mi"){
+			var officer = officerLookup[item];
+			location.hash = officer.id;
+		}else{
+			michiganModal();
+		}
         return false;
 	});
   }
@@ -715,9 +775,13 @@ var stateList = { states : [
 		
 		st[0].onmousedown = function() {
 			var state = this.raphael.name;
-			var officer = officerLookup[state];
-            
-            location.hash = officer.id;
+			
+			if (state !== "mi"){
+				var officer = officerLookup[state];
+            	location.hash = officer.id;
+           } else {
+		        michiganModal();
+           }
 		};
 		
         st[0].onmouseover = function () {
