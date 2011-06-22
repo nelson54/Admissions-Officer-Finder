@@ -62,15 +62,14 @@ div#dialog {
     margin:0 auto;
     text-align:center;
     color:#c03;
-
-    font-family: arial, Helvetica,sans-serif; 
+	font-family: arial, Helvetica,sans-serif; 
 }
 
 #title h1 {
     width:545px;
     font-size:16pt;
     text-transform:uppercase;
-    letter-spacing:3px;
+    letter-spacing:2.5px;
     font-weight:bold;
     margin-bottom:15px;
 }
@@ -78,7 +77,7 @@ div#dialog {
 #title p {
     font-size:9pt; 
     width:400px;
-    margin-bottom:20px;
+    margin-bottom:12px;
 }
 
 
@@ -96,38 +95,38 @@ div#dialog {
 .officer {
     position: relative;
     z-index: 1001;
-    width: 508px;
+    width: 520px;
     background-color: white;
     margin: 20px auto;
     display: table;
     border: 3px solid #DDD;
-    
-    top:50px;
+    top: 50px;
+    padding: 20px;
     
     }
 
 .officer-head {
-    padding-top:20px;
     }
 
 .officer-head img {
     float:left;
-    padding: 0px 0px 0px 20px;
     }
     
 .officer-head p.territory {
+	
+	
     font-size:8pt;
     }
 
 .officer h1 {
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     line-height: .8;
     }
     
 .officer h2 {
     font-size:9pt;
     text-transform:uppercase;
-    letter-spacing:2px;
+    letter-spacing:1px;
     font-weight:normal;
     color:#777;
     }
@@ -150,21 +149,46 @@ div#dialog {
     color:#777;
     }
     
+ .officer .contact {
+ 	font-size: 8pt;
+ 	margin-top: 3px;
+ 	margin-bottom: 3px;
+ }
+    
 .office-head-bottom {
     display:block;
     float:left;
     }
     
+.office-head-bottom h3, .office-head-bottom p, .office-head-right h1, .office-head-right h2, .office-head-right p, .office-head-right h4 {
+	margin-left: 0px;
+	}
+    
 .office-head-right {
     display: block;
-    width: 355px;
+    width: 320px;
     float: right;
+    padding-top: 8px;
+    border-top: 2px solid #C03;
     }
+        
+    
+.office-head-right h4, .office-head-right p {
+	margin-bottom:0;
+	margin-top: 0;
+	}
+	
+.office-head-right h4 {
+	margin-top: 5px;
+	}	    
 
 div#no-menu-content {
     position:relative;
     height: 600px;
     }
+
+
+
 
 </style>
 
@@ -226,11 +250,11 @@ div#no-menu-content {
         <a class="close" href="#close"></a>
         <div class="officer">
         <div class="officer-head">
-            <img src="placeholder.jpg"/>
+            <img src="http://i.imgur.com/nNJNc.jpg"/>
             <div class="office-head-right">
                 <h1>{{fullname}}</h1>
         	    <h2>{{title}}</h2>
-        	    <p>Contact {{firstname}} at <a href="mailto:{{email}}">{{email}}</a></p>
+        	    <p class="contact">Contact {{firstname}} at <a href="mailto:{{email}}">{{email}}</a></p>
                 <h4>Territory:</h4>
         	    <p class="territory">{{territorys}}</p>
             </div>
