@@ -24,7 +24,6 @@
 <script src="http://www.ferris.edu/admissions/js/fullcalendar.min.js" type="text/javascript"></script>
 <script src="http://www.ferris.edu/admissions/admin/public/js/jquery.tooltip.min.js" type="text/javascript"></script>
 
-
 <style type="text/css">
   	
 div#dialog {
@@ -246,6 +245,28 @@ div#no-menu-content {
 
 </body>
 </html>
+
+<script id="drilldown-form-template" type="text/x-handlebars-template">
+	<form id="drillDown">
+
+	    <select name="states">
+	    	<option value="none">&nbsp;</option>
+	    	{{#each states}}
+			<option value="{{this.abbr}}">{{this/title}}</option>
+			{{/each}}
+	    </select>
+
+	    <select name="counties">
+	    	<option value="none">&nbsp;</option>
+			{{#each county}}
+			<option value="{{this}}">{{this}}</option>
+			{{/each}}
+	    </select>
+
+	    <input type="submit" value="Find your officer" />
+    </form>
+</script>
+
 <script id="officer-template" type="text/x-handlebars-template">
     <div class="modal" id="{{id}}">
         <a class="close" href="#close"></a>
@@ -268,11 +289,251 @@ div#no-menu-content {
     </div>
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script src="handlebars.js"></script>
-<script src="raphael-min.js"></script>
-<script src="us-map-svg.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="handlebars.js"></script>
+<script type="text/javascript" src="raphael-min.js"></script>
+<script type="text/javascript" src="us-map-svg.js"></script>
 <script type="text/javascript">
+
+var stateList = { states : [
+  {
+	abbr:"AK",
+	title:"Alaska"
+  },
+  {
+	abbr:"AL",
+    title:"Alabama"
+  },
+  {
+	abbr:"AR",
+    title:"Arkansas"
+  },
+  {
+	abbr:"AS",
+    title:"American Samoa"
+  },
+  {
+	abbr:"AZ",
+    title:"Arizona"
+  },
+  {
+	abbr:"CA",
+    title:"California"
+  },
+  {
+	abbr:"CO",
+    title:"Colorado"
+  },
+  {
+	abbr:"CT",
+    title:"Connecticut"
+  },
+  {
+	abbr:"DC",
+    title:"D.C."
+  },
+  {
+	abbr:"DE",
+    title:"Delaware"
+  },
+  {
+	abbr:"FL",
+    title:"Florida"
+  },
+  {
+	abbr:"FM",
+    title:"Micronesia"
+  },
+  {
+	abbr:"GA",
+    title:"Georgia"
+  },
+  {
+	abbr:"GU",
+    title:"Guam"
+  },
+  {
+	abbr:"HI",
+    title:"Hawaii"
+  },
+  {
+	abbr:"IA",
+    title:"Iowa"
+  },
+  {
+	abbr:"ID",
+    title:"Idaho"
+  },
+  {
+	abbr:"IL",
+    title:"Illinois"
+  },
+  {
+	abbr:"IN",
+    title:"Indiana"
+  },
+  {
+	abbr:"KS",
+    title:"Kansas"
+  },
+  {
+	abbr:"KY",
+    title:"Kentucky"
+  },
+  {
+	abbr:"LA",
+    title:"Louisiana"
+  },
+  {
+	abbr:"MA",
+    title:"Massachusetts"
+  },
+  {
+	abbr:"MD",
+    title:"Maryland"
+  },
+  {
+	abbr:"ME",
+    title:"Maine"
+  },
+  {
+	abbr:"MH",
+    title:"Marshall Islands"
+  },
+  {
+	abbr:"MI",
+    title:"Michigan",
+    counties : [ "Alcona", "Alger", "Allegan", "Alpena", "Antrim", "Arenac", "Baraga", "Barry", "Bay", "Benzie", "Berrien", "Branch", "Calhoun", "Cass", "Charlevoix", "Cheboygan", "Chippewa", "Clare", "Clinton", "Crawford", "Delta", "Dickinson", "Eaton", "Emmet", "Genesee", "Gladwin", "Gogebic", "Grand Traverse", "Gratiot", "Hillsdale", "Houghton", "Huron", "Ingham", "Ionia", "Iosco", "Iron", "Isabella", "Jackson", "Kalamazoo", "Kalkaska", "Kent", "Keweenaw", "Lake", "Lapeer", "Leelanau", "Lenawee", "Livingston", "Luce", "Mackinac", "Macomb", "Manistee", "Marquette", "Mason", "Mecosta", "Menominee", "Midland", "Missaukee", "Monroe", "Montcalm", "Montmorency", "Muskegon", "Newaygo", "Oakland", "Oceana", "Ogemaw", "Ontonagon", "Osceola", "Oscoda", "Otsego", "Ottawa", "Presque Isle", "Roscommon", "Saginaw", "Sanilac", "Schoolcraft", "Shiawassee", "St. Clair", "St. Joseph", "Tuscola", "Van Buren", "Washtenaw", "Wayne", "Wexford" ]
+  },
+  {
+	abbr:"MN",
+    title:"Minnesota"
+  },
+  {
+	abbr:"MO",
+    title:"Missouri"
+  },
+  {
+	abbr:"MP",
+    title:"Marianas"
+  },
+  {
+	abbr:"MS",
+    title:"Mississippi"
+  },
+  {
+	abbr:"MT",
+    title:"Montana"
+  },
+  {
+	abbr:"NC",
+    title:"North Carolina"
+  },
+  {
+	abbr:"ND",
+    title:"North Dakota"
+  },
+  {
+	abbr:"NE",
+    title:"Nebraska"
+  },
+  {
+	abbr:"NH",
+    title:"New Hampshire"
+  },
+  {
+	abbr:"NJ",
+    title:"New Jersey"
+  },
+  {
+	abbr:"NM",
+    title:"New Mexico"
+  },
+  {
+	abbr:"NV",
+    title:"Nevada"
+  },
+  {
+	abbr:"NY",
+    title:"New York"
+  },
+  {
+	abbr:"OH",
+    title:"Ohio"
+  },
+  {
+	abbr:"OK",
+    title:"Oklahoma"
+  },
+  {
+	abbr:"OR",
+    title:"Oregon"
+  },
+  {
+	abbr:"PA",
+    title:"Pennsylvania"
+  },
+  {
+	abbr:"PR",
+    title:"Puerto Rico"
+  },
+  {
+	abbr:"PW",
+    title:"Palau"
+  },
+  {
+	abbr:"RI",
+    title:"Rhode Island"
+  },
+  {
+	abbr:"SC",
+    title:"South Carolina"
+  },
+  {
+	abbr:"SD",
+    title:"South Dakota"
+  },
+  {
+	abbr:"TN",
+    title:"Tennessee"
+  },
+  {
+	abbr:"TX",
+    title:"Texas"
+  },
+  {
+	abbr:"UT",
+    title:"Utah"
+  },
+  {
+	abbr:"VA",
+    title:"Virginia"
+  },
+  {
+	abbr:"VI",
+    title:"Virgin Islands"
+  },
+  {
+	abbr:"VT",
+    title:"Vermont"
+  },
+  {
+	abbr:"WA",
+    title:"Washington"
+  },
+  {
+	abbr:"WI",
+    title:"Wisconsin"
+  },
+  {
+	abbr:"WV",
+    title:"West Virginia"
+  },
+  {
+	abbr:"WY",
+    title:"Wyoming"
+  } ]
+};
   
   officerCollection = {
     1 : {
@@ -293,7 +554,7 @@ div#no-menu-content {
 		title : "SENIOR RECRUITING OFFICER",
   		email : "person1@host.com",
   		states : [ "ks","ok","tx","nd","sd","ne","mn","ia","mo","ar","la" ],
-		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
+		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New York",
 		question : "Why did you pick Ferris",
 		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
 	},
@@ -320,8 +581,46 @@ div#no-menu-content {
 		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
 	}
   }
+  
+  function initStateAbbrLookUp(){
+  	var StateAbbrLookUp = {};
+  	for(state in stateList.states){
+  		StateAbbrLookUp[stateList.states[state].abbr] = stateList.states[state];
+  	}(StateAbbrLookUp, stateList)
+  	return (StateAbbrLookUp);
+  }
+  
+  function renderDrillDownForm(state){
+  	var drillDownSource   = $("#drilldown-form-template").html();
+	var drillDownTemplate = Handlebars.compile(drillDownSource);
+	var drillDownContext = stateList;
+	
+	if (state){
+		$("form#drillDown select[name='states'] option[value='"+state+"']").attr("selected","selected");
+		drillDownContext['county'] = stateAbbrLookUp[state]["counties"];
+	} else {
+		drillDownContext['county'] = [];
+	}
+	
+	var drillDownHtml = drillDownTemplate(drillDownContext);
+	$("form#drillDown").remove();
+	$("#no-menu-content").prepend( drillDownHtml );
+	
+	if (state){
+		$("form#drillDown select[name='states'] option[value='"+state+"']").attr("selected","selected");
+	}
+	
+	$("form#drillDown select[name='states']").change(function(){
+		renderDrillDownForm($("form#drillDown select[name='states']").val());
+	});
+  }
+
+  stateAbbrLookUp = initStateAbbrLookUp();
 
   window.onload = function () {
+  	
+  	renderDrillDownForm();
+  	
     var R = Raphael("admissions_map", 1000, 600),
       attr = {
       "fill": "#d3d3d3",
