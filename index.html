@@ -97,10 +97,11 @@ div#dialog {
 	position: relative;
 	z-index: 1001;
 	background-color: white;
-	top: 50px;
+	top: 300px;
 	padding: 20px;
 	margin: 20px auto;
 	display: table;
+	border: 2px solid #ddd;
 }
 
 .officer {
@@ -111,7 +112,7 @@ div#dialog {
     margin: 20px auto;
     display: table;
     border: 3px solid #DDD;
-    top: 50px;
+    top: 160px;
     padding: 20px;
     
     }
@@ -300,7 +301,7 @@ div#no-menu-content {
         <div class="modal-form">
         	<form id="modal-form-county-search">
 		    <select name="counties">
-		    	<option value="none">&nbsp;</option>
+		    	<option value="none">Select County</option>
 				{{#each county}}
 				<option value="{{this}}">{{this}}</option>
 				{{/each}}
