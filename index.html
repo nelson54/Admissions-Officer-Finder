@@ -22,6 +22,9 @@
 <script type="text/javascript" src="http://www.ferris.edu/admissions/js/jquery.js">//</script>
 <script type="text/javascript" src="http://www.ferris.edu/admissions/js/jquery-ui.js">//</script>
 <script src="http://www.ferris.edu/admissions/js/fullcalendar.min.js" type="text/javascript"></script>
+
+<script src="selectivizr-min.js" type="text/javascript"></script>
+
 <script src="http://www.ferris.edu/admissions/admin/public/js/jquery.tooltip.min.js" type="text/javascript"></script>
 
 <style type="text/css">
@@ -35,21 +38,27 @@ div#dialog {
   		right:0px;
   		top:100px;
   	}
-      
-.modal:target {
-    display: table;
-    height: 635px;
-}
 
 .modal {
-    display: none;
-    height: 635px;
+    display: table-cell;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%;
+    height:100%;
     z-index: 999;
+    background: none repeat scroll 0 0 rgba(256, 256, 256, 0.7);
+    filter: progid:DXImageTransform.Microsoft.gradient(
+      gradientType=1, startColorStr=#99FFFFFF, endColorStr=#99FFFFFF
+    );
+
+    /* IE8 uses -ms-filter for whatever reason... */
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(
+      gradientType=1, startColorStr=#FFFFFF00, endColorStr=#FFFFFF00
+    );
 }
+
+.ui-helper-hidden {display:none;}
 
 #title div {
     padding-top:250px;
@@ -90,7 +99,6 @@ div#dialog {
     position:absolute;
     top:0px;
     z-index:1000;
-    background: none repeat scroll 0 0 rgba(256, 256, 256, 0.7);
 }
 
 .modal-form{
@@ -178,7 +186,7 @@ div#dialog {
     
 .office-head-right {
     display: block;
-    width: 275px;
+    width: 270px;
     float: left;
     padding-top: 8px;
     border-top: 2px solid #C03;
@@ -214,11 +222,6 @@ div#no-menu-content {
 	margin: 0 auto;
 }
 
-#questionnav {
-	display: block;
-	float: right;
-}
-
 </style>
 
 <link type="text/css" rel="stylesheet" media="print" href="http://wwwdev.ferris.edu/admissions/css/current/print.css" />
@@ -246,9 +249,9 @@ div#no-menu-content {
 			<div id="admissions_map"></div>
 
 			<div id="modals">
-				<div class="modal" id="title">
+				<div class="modal ui-helper-hidden" id="title">
+                    <a href="#close" class="close"></a>
                     <div>
-					<a href="#close" class="close"></a>
 					<h1> Select your state and country*<br /> to find an admissions counselor<br /> that represents your area.</h1>
 					<p>*Applicable only to Michigan residents.</p>
 					<p>Please note that these territories are non-exclusive. Any member of ourstaff is qualified and willing to assist you.</p>
@@ -317,7 +320,7 @@ div#no-menu-content {
 </script>
 
 <script id="officer-template" type="text/x-handlebars-template">
-    <div class="modal" id="{{id}}">
+    <div class="modal ui-helper-hidden" id="{{id}}">
         <a class="close" href="#close"></a>
         <div class="officer">
         <div class="officer-head">
@@ -334,12 +337,7 @@ div#no-menu-content {
         	<h3>{{question}}</h3>
         	<p>{{answer}}</p>
         </div>
-        
-        <div id="question-nav">
-        <a href="#""><img src="images/prevquestion.gif""</a>
-        <a href="#""><img src="images/nextquestion.gif""</a>
         </div>
-        
     </div>
 </script>
 
@@ -348,6 +346,32 @@ div#no-menu-content {
 <script type="text/javascript" src="raphael-min.js"></script>
 <script type="text/javascript" src="us-map-svg.js"></script>
 <script type="text/javascript">
+
+if (!Array.prototype.map)
+{
+  Array.prototype.map = function(fun /*, thisp */)
+  {
+    "use strict";
+
+    if (this === void 0 || this === null)
+      throw new TypeError();
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function")
+      throw new TypeError();
+
+    var res = new Array(len);
+    var thisp = arguments[1];
+    for (var i = 0; i < len; i++)
+    {
+      if (i in t)
+        res[i] = fun.call(thisp, t[i], i, t);
+    }
+
+    return res;
+  };
+}
 
 var stateList = { states : [
   {
@@ -637,6 +661,33 @@ var stateList = { states : [
 	}
   }
   
+  window.modal = function(id){
+  	this.selector = function (id){
+  		return $("#"+id);
+  	};
+  	
+  	this.clickHandler = function(id, func){
+  		$("a.close").click(function(){func(id)});
+  	};
+  	
+  	this.show = function(id){
+  		$("a.close").click();
+  		window.mapHover = false;
+  		this.selector(id).show();
+  		/*location.hash = id;*/
+  	};
+  	
+  	this.hide = function(id){
+  		window.mapHover = true;
+  		id.hide();
+  		/*location.hash = "";*/
+  	};
+  	
+  	this.show(id);
+  	
+  	this.clickHandler(this.selector(id), this.hide);
+  };
+  
   function initStateAbbrLookUp(){
   	var StateAbbrLookUp = {};
   	for(state in stateList.states){
@@ -655,13 +706,11 @@ var stateList = { states : [
 	
 	$("#modals").prepend( drillDownHtml );
 	
-	location.hash = "modal-form";
+	new modal("modal-form");
 	
 	$("form#modal-form-county-search select[name='counties']").change(function(){
-		var item = $("form#modal-form-county-search select[name='counties']").val();
-		
-		var officer = officerLookup[item];
-		location.hash = officer.id;
+
+		new modal( officerLookup[$("form#modal-form-county-search select[name='counties']").val()].id );
 		
 		return false;
 	})
@@ -714,8 +763,7 @@ var stateList = { states : [
 		}
 		
 		if (item != "mi"){
-			var officer = officerLookup[item];
-			location.hash = officer.id;
+			new modal(officerLookup[item].id);
 		}else{
 			michiganModal();
 		}
@@ -742,12 +790,12 @@ var stateList = { states : [
     
     usRaphael = {};
     
-    location.hash = "title";
-    
-    officerLookup = {};
+    new modal("title");
 
     var source   = $("#officer-template").html();
 	var template = Handlebars.compile(source);
+
+	officerLookup = {};
 
     for ( var officer in officerCollection ) {
         var context = officerCollection[ officer ];
@@ -763,6 +811,8 @@ var stateList = { states : [
         
       }(officerCollection, officerLookup)
     
+    var states = [];
+    
     //Draw Map and store Raphael paths
     for (var state in usMap) {
 	  var officer = officerLookup[state];
@@ -770,68 +820,69 @@ var stateList = { states : [
       var path = R.path(usMap[state]).attr(attr);
       path.name = state;
       usRaphael[state] = path;
-      //officer.states[state] =
+      states.push(path);
     };
-  
     
-    //Do Work on Map
-    for (var state in usRaphael) {
-      usRaphael[state].color = Raphael.getColor();
-      
-      (function (st, state) {
-        
-        current = null;
-        
-        st[0].style.cursor = "pointer";
-		
-		st[0].onmousedown = function() {
-			var state = this.raphael.name;
-			
-			if (state !== "mi"){
-				var officer = officerLookup[state];
-            	location.hash = officer.id;
-           } else {
-		        michiganModal();
-           }
+    animateGroup = function(state){ usRaphael[ state ].animate({fill: "#bbbbbb"}, 100); };
+    
+    mapEventRouter = function(object, type){
+      switch(type){
+        case "click": 
+          if (!window.mapHover){
+            $("a.close").click();
+          }else{
+		    if (object !== "mi"){
+	           new modal(officerLookup[object].id);
+	        } else {
+		 	   michiganModal();
+	        };
+	      };
+	      break;
+	    case "over":
+          officerLookup[object].states.map(animateGroup)
+          if ( object === "mi" ){
+            usRaphael[object].animate({fill: "#cc0033" }, 100);
+          } else {
+            usRaphael[object].animate({fill: "#777777" }, 100);
+          };
+          usRaphael[ object ].toFront();
+          R.safari();
+          break;
+	    case "out":
+          for(var state in usRaphael){
+              usRaphael[ state ].animate({fill: "#d3d3d3"}, 100);
+          };
+          usRaphael[ object ].toFront();
+          R.safari();
+          break;
+      }
+    }
+    
+    window.current = null;
+    
+    var setup = function (stte){
+    	stte.color = Raphael.getColor();
+    	stte[0].style.cursor = "pointer";
+    	stte[0].onmousedown = function() {
+		   mapEventRouter(this.raphael.name, "click");
 		};
 		
-        st[0].onmouseover = function () {
-          if (current != this.raphael.name) {
-              current = this.raphael.name;
-              var nstate = this.raphael.name;
-              var officer = officerLookup[nstate];
-              
-              for(state in officer.states){
-              	  usRaphael[ officer.states[state] ].animate({fill: "#bbb"}, 100);
-              }
-              
-              if ( this.raphael.name == "mi" ){
-                st.animate({fill: "#cc0033" }, 100);
-              } else {
-                st.animate({fill: "#777777" }, 100);
-              }
-    
-              st.toFront();
-              R.safari();
-           }
-        };
-        
-        st[0].onmouseout = function () {
-          current = null;
-          var nstate = this.raphael.name;
-          
-          var officer = officerLookup[nstate];
-          
-          for(stte in usRaphael){
-              usRaphael[ stte ].animate({fill: "#d3d3d3"}, 100);
-          }
-
-          st.toFront();
-          R.safari();
-        };
-                   
-      })(usRaphael[state], state);
-    };
+		stte[0].onmouseover = function() {
+		   if (window.current != this.raphael.name && window.mapHover ) {
+		   	  window.current = this.raphael.name;
+		      mapEventRouter(this.raphael.name, "over");
+		   }
+		};
+		
+		stte[0].onmouseout = function() {
+		   window.current = null;
+		   mapEventRouter(this.raphael.name, "out");
+		};
+    	
+    	return stte;
+    }
+  
+    states = states.map( setup );
   }
 </script>	
 	
