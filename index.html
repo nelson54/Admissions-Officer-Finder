@@ -58,6 +58,8 @@ div#dialog {
     );
 }
 
+form#drillDown select {width:150px; padding:2px 2px;}
+
 .ui-helper-hidden {display:none;}
 
 #title div {
@@ -290,14 +292,12 @@ div#no-menu-content {
 			{{/each}}
 	    </select>
 
-	    <select name="counties">
+	    <select name="counties" disabled="disabled">
 	    	<option value="none">&nbsp;</option>
 			{{#each county}}
 			<option value="{{this}}">{{this}}</option>
 			{{/each}}
 	    </select>
-
-	    <input type="submit" value="Find your officer" />
 
     </form>
     </div>
@@ -324,7 +324,7 @@ div#no-menu-content {
         <a class="close" href="#close"></a>
         <div class="officer">
         <div class="officer-head">
-            <img src="images/adminofficer_180.jpg"/>
+            <img src="{{image}}"/>
             <div class="office-head-right">
                 <h1>{{fullname}}</h1>
         	    <h2>{{title}}</h2>
@@ -618,44 +618,109 @@ var stateList = { states : [
 		id : "Paul_Kwant",
   		fullname : "Paul Kwant",
 		firstname : "Paul",
+		image : "images/adminofficer_180.jpg",
 		title : "SENIOR RECRUITING OFFICER",
   		email : "person1@host.com",
   		states : [ "ak","hi", "wa", "or", "ca", "id","nv","az","mt","wy","co","ut","nm" ],
-    	counties : [ "Alcona", "Alger", "Allegan", "Alpena", "Antrim", "Arenac", "Baraga", "Barry", "Bay", "Benzie", "Berrien", "Branch", "Calhoun", "Cass", "Charlevoix", "Cheboygan", "Chippewa", "Clare", "Clinton", "Crawford", "Delta", "Dickinson", "Eaton", "Emmet", "Genesee", "Gladwin", "Gogebic", "Grand Traverse", "Gratiot", "Hillsdale", "Houghton", "Huron", "Ingham", "Ionia", "Iosco", "Iron", "Isabella", "Jackson", "Kalamazoo", "Kalkaska", "Kent", "Keweenaw", "Lake", "Lapeer", "Leelanau", "Lenawee", "Livingston", "Luce", "Mackinac", "Macomb", "Manistee", "Marquette", "Mason", "Mecosta", "Menominee", "Midland", "Missaukee", "Monroe", "Montcalm", "Montmorency", "Muskegon", "Newaygo", "Oakland", "Oceana", "Ogemaw", "Ontonagon", "Osceola", "Oscoda", "Otsego", "Ottawa", "Presque Isle", "Roscommon", "Saginaw", "Sanilac", "Schoolcraft", "Shiawassee", "St. Clair", "St. Joseph", "Tuscola", "Van Buren", "Washtenaw", "Wayne", "Wexford" ],
+    	counties : [ "Gladwin", "Midland", "Bay", "Huron", "Saginaw", "Sanilac", "Gratiot", "Tuscola", "Arenac", "Clare", "Isabella", "Montcalm" ],
 		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
 		question : "Why did you pick Ferris",
-		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well",
 	},
     2 : {
-    	id : "Person_2",
-  		fullname : "Person 2",
-		firstname : "Paul",
-		title : "SENIOR RECRUITING OFFICER",
-  		email : "person1@host.com",
+    	id : "Krista_Hansen",
+  		fullname : "Krista Hansen",
+		firstname : "Krista",
+		title : "Recruiter / Financial Aid Officer",
+  		email : "hansenk8@ferris.edu",
   		states : [ "ks","ok","tx","nd","sd","ne","mn","ia","mo","ar","la" ],
-		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New York",
+  		counties : ["Allegan", "St. Joseph", "Kalamazoo", "Berrien", "Cass", "Van Buren"],
+		territorys : "Allegan, St. Joseph, Kalamazoo, Berrien, Cass, Van Buren & the state of Illinois",
+		bio : "Hello, my name is Krista Hansen originally from Battle Creek, I am now happy to live in St. Joseph near Lake Michigan's beautiful beaches. I earned my Bachelor of Music Education degree in 2003 and spent four years teaching instrumental music in the public schools.<br />Please don't hesitate to contact me with any questions regarding the admission or financial aid processes. If you\'d like to set up a meeting with me, my office is conveniently located at our branch campus in Dowagiac on the campus of Southwestern Michigan College.",
 		question : "Why did you pick Ferris",
 		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
 	},
     3 : {
-        id : "Person_3",
-  		fullname : "Person 3",
-		firstname : "Paul",
-		title : "SENIOR RECRUITING OFFICER",
-  		email : "person1@host.com",
+        id : "Amber_Balmer",
+  		fullname : "Amber Balmer",
+		firstname : "Amber",
+		title : "Recruiting Officer",
+  		email : "balmera@ferris.edu",
   		states : [ "wi","il","ms","mi","ind","ky","tn","al","oh","ga","fl" ],
-		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
+  		counties : ["Kent"],
+		territorys : "Kent County & The state of Missouri.",
 		question : "Why did you pick Ferris",
 		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
 	},
     4 : {
-        id : "Person_4",
-      	fullname : "Person 4",
-		firstname : "Paul",
-		title : "SENIOR RECRUITING OFFICER",
-  		email : "person1@host.com",
+        id : "Natalia_Carvalho_Pinto",
+      	fullname : "Natalia Carvalho-Pinto",
+		firstname : "Natalia",
+		title : "Recruiting Officer",
+  		email : "carv9@ferris.edu",
   		states : [ "ny","pa","md","wv","va","nc","sc","me","nh","vt","ma","ri","ct","nj","de" ],
-		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
+  		counties : ["Mecosta", "Mason", "Lake", "Newaygo", "Muskegon", "Ottawa", "Osceola", "Oceana"],
+		territorys : "Mecosta, Mason, Lake, Newaygo, Muskegon, Ottawa, Osceola, Oceana & the state of California",
+		question : "Why did you pick Ferris",
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
+	},
+    5 : {
+        id : "Angela_Garrey",
+      	fullname : "Angela Garrey",
+		firstname : "Angela",
+		title : "Recruiter / Financial Aid Officer",
+  		email : "garreya@ferris.edu",
+  		states : [ "pa" ],
+  		counties : ["Alcona", "Alger", "Alpena", "Baraga", "Cheboygan", "Chippewa", "Crawford", "Delta", "Dickinson", "Gogebic", "Houghton", "Iosco", "Iron", "Keweenaw", "Luce", "Mackinac", "Marquette", "Menominee", "Montmorency", "Ogemaw", "Ontonagon", "Oscoda", "Otsego", "Presque Isle", "Roscommon", "Schoolcraft", "Antrim", "Benzie", "Charlevoix", "Emmet", "Grand Traverse", "Kalkaska", "Leelanau", "Manistee", "Missaukee", "Wexford"],
+		territorys : "Alcona, Alger, Alpena, Baraga, Cheboygan, Chippewa, Crawford, Delta, Dickinson, Gogebic, Houghton, Iosco, Iron, Keweenaw, Luce, Mackinac, Marquette, Menominee, Montmorency, Ogemaw, Ontonagon, Oscoda, Otsego, Presque Isle, Roscommon, Schoolcraft, Antrim, Benzie, Charlevoix, Emmet, Grand Traverse, Kalkaska, Leelanau, Manistee, Missaukee, Wexford & the state of Pennsylvania",
+		question : "Why did you pick Ferris",
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
+	},
+    6 : {
+        id : "Chris_Higley",
+      	fullname : "Chris Higley",
+		firstname : "Chris",
+		title : "Admissions Officer",
+  		email : "carv9@ferris.edu",
+  		states : [ "ia" ],
+  		counties : ["Barry", "Eaton", "Ingham", "Calhoun", "Jackson", "Washtenaw", "Branch", "Hillsdale", "Lenawee", "Ionia", "Clinton", "Shiawassee"],
+		territorys : "Barry, Eaton, Ingham, Calhoun, Jackson, Washtenaw, Branch, Hillsdale, Lenawee, Ionia, Clinton, Shiawassee & the state of Lowa",
+		question : "Why did you pick Ferris",
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
+	},
+    7 : {
+        id : "Tyrone_Collins",
+      	fullname : "Tyrone Collins",
+		firstname : "Tyrone",
+		title : "Admissions Counselor",
+  		email : "collinst@ferris.edu",
+  		states : [ "ca" ],
+  		counties : ["Macomb", "Monroe", "Wayne"],
+		territorys : "Macomb, Monroe, Wayne & the state of California",
+		question : "Why did you pick Ferris",
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
+	},
+    8 : {
+        id : "Leah_Goode",
+      	fullname : "Leah Goode",
+		firstname : "Leah",
+		title : "Recruiting Officer",
+  		email : "goodel@ferris.edu",
+  		states : [ "fl" ],
+  		counties : ["Genesee", "Lapeer", "St. Clair", "Oakland", "Livingston"],
+		territorys : "Genesee, Lapeer, St. Clair, Oakland, Livingston & the state of Florida",
+		question : "Why did you pick Ferris",
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
+	},
+	9 : {
+        id : "Angie_Mishler",
+      	fullname : "Angie Mishler",
+		firstname : "Angie",
+		title : "Senior Recruiting Officer",
+  		email : "mishlera@ferris.edu",
+  		states : [ "ca" ],
+  		counties : ["Osceola", "Mecosta", "Isabella", "Kent", "Montcalm"],
+		territorys : "Mecosta, Mason, Lake, Newaygo, Muskegon, Ottawa, Osceola, Oceana & the state of California",
 		question : "Why did you pick Ferris",
 		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
 	}
@@ -679,6 +744,7 @@ var stateList = { states : [
   	
   	this.hide = function(id){
   		window.mapHover = true;
+  		window.unhighlightMap();
   		id.hide();
   		/*location.hash = "";*/
   	};
@@ -751,6 +817,8 @@ var stateList = { states : [
 			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#cc0033"}, 100);
 		} else {
 			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#777"}, 100);
+			new modal( officerLookup[ $( "form#drillDown select[name='states']" ).val().toLowerCase()].id );
+			
 		}
 
 	});
@@ -825,12 +893,19 @@ var stateList = { states : [
     
     animateGroup = function(state){ usRaphael[ state ].animate({fill: "#bbbbbb"}, 100); };
     
+    window.unhighlightMap = function(){
+    	for(var state in usRaphael){
+    		usRaphael[ state ].animate({fill: "#d3d3d3"}, 100);
+    	}
+    };
+    
     mapEventRouter = function(object, type){
       switch(type){
         case "click": 
           if (!window.mapHover){
             $("a.close").click();
           }else{
+	           usRaphael[object].animate({fill: "#cc0033" }, 100);
 		    if (object !== "mi"){
 	           new modal(officerLookup[object].id);
 	        } else {
@@ -849,9 +924,7 @@ var stateList = { states : [
           R.safari();
           break;
 	    case "out":
-          for(var state in usRaphael){
-              usRaphael[ state ].animate({fill: "#d3d3d3"}, 100);
-          };
+          unhighlightMap();
           usRaphael[ object ].toFront();
           R.safari();
           break;
