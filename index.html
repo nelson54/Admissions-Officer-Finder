@@ -180,8 +180,15 @@ form#drillDown select {width:150px; padding:2px 2px;}
  	margin-top: 3px;
  	margin-bottom: 3px;
  }
-    
+
 .office-head-bottom {
+	width: 500px;
+	display:block;
+    float:left;
+}
+  
+.office-head-bottom div {
+	width: 480px;
     display:block;
     float:left;
     }
@@ -335,19 +342,22 @@ div#no-menu-content {
         </div>
         <div class="office-head-bottom">
         	{{#each qna}}
-        	<h3>{{this/question}}</h3>
-        	<p>{{this/answer}}</p>
+        	<div>
+	        	<h3>{{this/question}}</h3>
+	        	<p>{{this/answer}}</p>
+        	</div>
         	{{/each}}
         </div>
         <div class="office-questions-nav">
-        	<a href="#next"><img src="images/prevquestion.gif" /></a>
-        	<a href="#prev"><img src="images/nextquestion.gif" /></a>
+        	<a class="prev" href="#"><img src="images/prevquestion.gif" /></a>
+        	<a class="next" href="#"><img src="images/nextquestion.gif" /></a>
         </div>
         </div>
     </div>
 </script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.cycle.all.min.js"></script>
 <script type="text/javascript" src="handlebars.js"></script>
 <script type="text/javascript" src="raphael-min.js"></script>
 <script type="text/javascript" src="us-map-svg.js"></script>
@@ -630,9 +640,16 @@ var stateList = { states : [
   		states : [ "ak","hi", "wa", "or", "ca", "id","nv","az","mt","wy","co","ut","nm" ],
     	counties : [ "Gladwin", "Midland", "Bay", "Huron", "Saginaw", "Sanilac", "Gratiot", "Tuscola", "Arenac", "Clare", "Isabella", "Montcalm" ],
 		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
+		qna : [ 
+			{question : "Why did you pick Ferris?",
+			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ,
+			{question : "What makes Ferris standout over other schools?",
+			answer : "There are many activities that students can get involved in while on-campus. One worth checking out is our Student Ambassador Organization. Our Student Ambassadors are an integral part of our admissions team and have a lot of fun while assisting our campus visitors!"},
+			{question : "What advice would you give to an incoming Freshman/Transfer Student?",
+			answer : "I recommend that you get involved and make new friends while here on campus. Life is way too short to stay in your Residence Hall room by yourself. Hang out at Starbucks, or attend a Hockey game. Your time here on campus is what you make of it! Get out there! One of my favorite things to do on campus is participate in the Homecoming game tailgate festivities. The College of Engineering Technology Chili Cook-off rocks!"},
+			{question : "When you are not recruiting students what do you do in your past time?",
+			answer : "When not recruiting students, I enjoy spending time with my family, watching movies, Detroit Red Wing hockey, and playing my guitars."}
+			]
 	},
     2 : {
     	id : "Krista_Hansen",
@@ -645,9 +662,18 @@ var stateList = { states : [
   		counties : ["Allegan", "St. Joseph", "Kalamazoo", "Berrien", "Cass", "Van Buren"],
 		territorys : "Allegan, St. Joseph, Kalamazoo, Berrien, Cass, Van Buren & the state of Illinois",
 		bio : "Hello, my name is Krista Hansen originally from Battle Creek, I am now happy to live in St. Joseph near Lake Michigan's beautiful beaches. I earned my Bachelor of Music Education degree in 2003 and spent four years teaching instrumental music in the public schools.<br />Please don't hesitate to contact me with any questions regarding the admission or financial aid processes. If you\'d like to set up a meeting with me, my office is conveniently located at our branch campus in Dowagiac on the campus of Southwestern Michigan College.",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
+		qna : [ 
+		    {question : "What is the one item you would encourage students to check out at Ferris before graduating?",
+			answer : "Take a serious look at our study away programs. You have a chance to spend a semester or a year in another country while earning credits toward your degree. It is surprisingly affordable and a life changing experience!"},
+			{question : "When you are not recruiting students what do you do in your past time?",
+			answer : "I enjoy music, writing, reading, and spending time with my friends and family."},
+			{question : "What advice would you give to an incoming Freshman/Transfer Student?",
+			answer : "Get involved with activities on campus. Whether you're into sports or music, politics or Greek life, there really is something for everyone here. You will meet people and enjoy your college experience so much more if you get involved in activities that interest you."},
+			{question : "Favorite thing to do in Big Rapids?",
+			answer : "Canoeing or floating in a tube down the Muskegon River with a group of friends."},
+			{question : "Favorite Spot on Campus?",
+			answer : "My favorite spot on campus is the Rock Dining Center. I have eaten at many different campus dining facilities and I will tell you that the food at Ferris is truly exceptional.  You won't go hungry!"}
+		]
 	},
     3 : {
         id : "Amber_Balmer",
@@ -659,9 +685,22 @@ var stateList = { states : [
   		states : [ "wi","il","ms","mi","ind","ky","tn","al","oh","ga","fl" ],
   		counties : ["Kent"],
 		territorys : "Kent County & The state of Missouri.",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
+		qna : [
+			{question : "What is your favorite tradition at Ferris?",
+			answer : "My favorite tradition at Ferris is Homecoming. It's the best time of year and I get to see all my long lost friends."},
+			{question : "What makes Ferris standout over other schools?",
+			answer : "Ferris is a fun loving community that works together. This school provides unique opportunities to all students and promotes individual growth. Ferris stands out above the rest because the amazing student body, faculty, and administration."},
+			{question : "What is the one item you would encourage students to check out at Ferris before graduating?",
+			answer : "The one thing a student must check out before they graduate from Ferris State is a Student Government Association meeting! Student Government is dear to my heart and provided me an \"out of class room\" education."},
+			{question : "When you are not recruiting students what do you do in your past time?",
+			answer : "In my free time I like to brush up on new trends in social media, read read read, cook, garden, and try new things like yoga!"},
+			{question : "What advice you would give to an incoming Freshman/Transfer Student?",
+			answer : "My advice to an incoming student is take advantage of all the on campus activities and organizations. There is so much to do on campus... see the comedians, watch a movie in the quad, join a professional organization, be a student ambassador, eat pancakes until you fall over at Pancakes with the president, and have fun!!"},
+			{question : "Favorite thing to do in Big Rapids?",
+			answer : "My favorite thing to do in Big Rapids...that's a tie between eating lemon sorbet in a waffle cone at the Old Pioneer Store and Tubing down the river in the middle of July! (I just had a thought I should try both at the same time)"},
+			{question : "Favorite Spot on Campus?",
+			answer : "My favorite spot on campus is the clock tower at noon! It makes me proud to be a bulldog!"}
+		]
 	},
     4 : {
         id : "Natalia_Carvalho_Pinto",
@@ -673,9 +712,20 @@ var stateList = { states : [
   		states : [ "ny","pa","md","wv","va","nc","sc","me","nh","vt","ma","ri","ct","nj","de" ],
   		counties : ["Mecosta", "Mason", "Lake", "Newaygo", "Muskegon", "Ottawa", "Osceola", "Oceana"],
 		territorys : "Mecosta, Mason, Lake, Newaygo, Muskegon, Ottawa, Osceola, Oceana & the state of California",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
+		qna : [ 
+			{question : "Why did you pick Ferris?",
+			answer : "Originally from Sao-Paulo, Brazil, I first came to Ferris as an International Student to study English for one year, but I quickly realized that Ferris was a great fit for me.  I loved campus life and campus events, found my fit and made friends through the Student Organizations and Athletic Events, and learned that I could succeed academically here through all the resources available to students, such as our SLA program, tutoring center and career counseling.  I am happy to say now that Ferris has been my home for the last 8 years.  I love working with students and their families, and helping them take their first steps towards a college degree and their career goals."},
+			{question : "What is your favorite memory at Ferris?",
+			answer : "The Hockey games are great!"},
+			{question : "What is the one item you would encourage students to check out at Ferris before graduating?",
+			answer : "A hockey game. The Rock dining facility.  Homecoming week activities.  The International Festival of Cultures."},
+			{question : "What advice would you give to an incoming Freshman/Transfer Student?",
+			answer : "Get Involved.  Participate in as many student organizations and campus events as you are able to...  There are great things to do at Ferris.  Getting involved will make your college experience a lot more complete, more educational, fuller, and a lot more exciting!"},
+			{question : "What is your favorite thing to do in Big Rapids?",
+			answer : "Eating at Buffalo Wild Wings, tubing, and taking my daughter to the local parks."},
+			{question : "What is your favorite spot on campus?",
+			answer : "The Ferris Library for Information Technology and Education (FLITE).  It is one of the biggest, most complete and most beautiful libraries you will encounter in a higher education setting."}
+		]	
 	},
     5 : {
         id : "Angela_Garrey",
@@ -687,9 +737,24 @@ var stateList = { states : [
   		states : [ "pa" ],
   		counties : ["Alcona", "Alger", "Alpena", "Baraga", "Cheboygan", "Chippewa", "Crawford", "Delta", "Dickinson", "Gogebic", "Houghton", "Iosco", "Iron", "Keweenaw", "Luce", "Mackinac", "Marquette", "Menominee", "Montmorency", "Ogemaw", "Ontonagon", "Oscoda", "Otsego", "Presque Isle", "Roscommon", "Schoolcraft", "Antrim", "Benzie", "Charlevoix", "Emmet", "Grand Traverse", "Kalkaska", "Leelanau", "Manistee", "Missaukee", "Wexford"],
 		territorys : "Alcona, Alger, Alpena, Baraga, Cheboygan, Chippewa, Crawford, Delta, Dickinson, Gogebic, Houghton, Iosco, Iron, Keweenaw, Luce, Mackinac, Marquette, Menominee, Montmorency, Ogemaw, Ontonagon, Oscoda, Otsego, Presque Isle, Roscommon, Schoolcraft, Antrim, Benzie, Charlevoix, Emmet, Grand Traverse, Kalkaska, Leelanau, Manistee, Missaukee, Wexford & the state of Pennsylvania",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
+		qna : [ 
+			{question : "Why Did You Pick Ferris?",
+			answer : "I picked Ferris for a numerous reasons, but the number one reason it is fit me! The mid size campus, the faculty and the community of Ferris made me feel at like I was coming home."},
+			{question : "What is your favorite memory of Ferris?",
+			answer : "My favorite memory of Ferris would probably be when I met my now husband (we have the same birthday)."},
+			{question : "What is your favorite tradition of Ferris?",
+			answer : "My favorite tradition at Ferris would have to be all sorority rush. Watching young ladies open their bid cards is a tradition like no other it gives you a sense of pride of being in an organization with so many great young women."},
+			{question : "What makes Ferris standout over other schools?",
+			answer : "Ferris stands out compared to other schools with its peeps. I don't mean the candy, I mean all the amazing people who create the university. The students, the faculty, and the staff everyone you interact with on a day to day basis make you a better person and a better student."},
+			{question : "The one item you encourage student to check out at Ferris before graduating?",
+			answer : "The third floor of the Timme Center."},
+			{question : "Advice you would give to an incoming Freshman/Transfer Student?",
+			answer : "My advice to students coming in as a freshman or a transfer student is to use all the resources on campus available to you. Getting involved with the RSO's, going to sporting events, enjoying the restaurants of Big Rapids, knowing your faculty, taking a class SLA, find out more about the history of the institution, all of which are accessible to students."},
+			{question : "What is your favorite thing to do in Big Rapids?",
+			answer : "Going out to SCHUBERG'S with good friends, I have my own booth."},
+			{question : "What is your Favorite Spot on Campus?",
+			answer : "My favorite spot on campus would be the alumni building. It is where it all began and looking at the tile mosaic of the institutions true foundation is a great way to take pride in being a Ferris State Bulldog."},
+		]	
 	},
     6 : {
         id : "Chris_Higley",
@@ -761,7 +826,7 @@ var stateList = { states : [
   	this.show = function(id){
   		$("a.close").click();
   		this.selector(id).show();
-  		/*location.hash = id;*/
+  		$('.office-head-bottom').cycle({fx: 'fade', next: '.next', prev:'.prev' });
   	};
   	
   	this.hide = function(id){
@@ -1005,7 +1070,11 @@ var stateList = { states : [
     window.formView = new drillDownFormView();
     window.front = new appController();
     
-    states = states.map( setup );
+    states = states.map( setup );   
   }
+  
+$(document).ready(function() {
+
+})
 </script>	
 	
