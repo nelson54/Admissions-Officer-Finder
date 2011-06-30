@@ -39,6 +39,10 @@ div#dialog {
   		top:100px;
   	}
 
+select option {
+	margin-top:1px;
+}
+
 .modal {
     display: table-cell;
     left: 0;
@@ -284,18 +288,10 @@ div#no-menu-content {
 	<div id="drilldowndiv">
 	<form id="drillDown">
 
-
 	    <select name="states">
 	    	<option value="none">&nbsp;</option>
 	    	{{#each states}}
 			<option value="{{this.abbr}}">{{this/title}}</option>
-			{{/each}}
-	    </select>
-
-	    <select name="counties" disabled="disabled">
-	    	<option value="none">&nbsp;</option>
-			{{#each county}}
-			<option value="{{this}}">{{this}}</option>
 			{{/each}}
 	    </select>
 
@@ -625,7 +621,7 @@ var stateList = { states : [
     	counties : [ "Gladwin", "Midland", "Bay", "Huron", "Saginaw", "Sanilac", "Gratiot", "Tuscola", "Arenac", "Clare", "Isabella", "Montcalm" ],
 		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
 		question : "Why did you pick Ferris",
-		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well",
+		answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"
 	},
     2 : {
     	id : "Krista_Hansen",
@@ -737,14 +733,12 @@ var stateList = { states : [
   	
   	this.show = function(id){
   		$("a.close").click();
-  		window.mapHover = false;
   		this.selector(id).show();
   		/*location.hash = id;*/
   	};
   	
   	this.hide = function(id){
-  		window.mapHover = true;
-  		window.unhighlightMap();
+  		front.reset();
   		id.hide();
   		/*location.hash = "";*/
   	};
@@ -815,6 +809,7 @@ var stateList = { states : [
 		
 		if (state === "mi"){
 			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#cc0033"}, 100);
+			michiganModal();
 		} else {
 			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#777"}, 100);
 			new modal( officerLookup[ $( "form#drillDown select[name='states']" ).val().toLowerCase()].id );
@@ -891,70 +886,101 @@ var stateList = { states : [
       states.push(path);
     };
     
-    animateGroup = function(state){ usRaphael[ state ].animate({fill: "#bbbbbb"}, 100); };
     
-    window.unhighlightMap = function(){
-    	for(var state in usRaphael){
-    		usRaphael[ state ].animate({fill: "#d3d3d3"}, 100);
-    	}
-    };
-    
-    mapEventRouter = function(object, type){
-      switch(type){
-        case "click": 
-          if (!window.mapHover){
-            $("a.close").click();
-          }else{
-	           usRaphael[object].animate({fill: "#cc0033" }, 100);
-		    if (object !== "mi"){
-	           new modal(officerLookup[object].id);
-	        } else {
-		 	   michiganModal();
-	        };
-	      };
-	      break;
-	    case "over":
-          officerLookup[object].states.map(animateGroup)
-          if ( object === "mi" ){
-            usRaphael[object].animate({fill: "#cc0033" }, 100);
-          } else {
-            usRaphael[object].animate({fill: "#777777" }, 100);
-          };
-          usRaphael[ object ].toFront();
-          R.safari();
-          break;
-	    case "out":
-          unhighlightMap();
-          usRaphael[ object ].toFront();
-          R.safari();
-          break;
-      }
-    }
-    
-    window.current = null;
-    
+  usMapView = function(){
+  	this.defaultColor = "#d3d3d3";
+  	this.highlightColor = "#777777";
+	this.sectionHighlightColor = "#bbbbbb";
+  	this.specialHighlightColor = "#CC0033";
+  	
+  	this.reset = function(){
+      for(var state in usRaphael){ usRaphael[ state ].animate({fill: mapView.defaultColor }, 100); }
+      R.safari();
+  	};
+  	
+  	this.chooseState = function(state){
+  		this.highlightState(state, false, this.specialHighlightColor);
+  	};
+
+	this.highlight = function(state, section, special){
+		if ( special === true ) { var color = this.specialHighlightColor } else { var color = this.highlightColor }
+		this.highlightSection( section );
+		this.highlightState(state, false, color);
+	};
+
+  	this.highlightSection = function( section ){
+  	  section.map( this.highlightState );
+  	};
+
+  	this.highlightState = function(state, position, color){
+  	  if ( typeof position === "number"){var color = mapView.sectionHighlightColor;}
+  	  usRaphael[ state ].animate({ fill: color }, 100);
+  	};
+  };
+  
+  drillDownFormView = function(){
+	this.highlightState = function(state){
+	  $('select[name="states"] option[value="'+state.toUpperCase()+'"]').attr("selected", "selected");
+	};
+
+    this.reset = function(){
+	  $('select[name="states"] option[value="none"]').attr("selected", "selected");
+	};
+	
+	$('select[name="states"] option').mouseenter(function(e){
+		front.highlight($(e.target).attr("value").toLowerCase());
+	})
+	$('select[name="states"] option').mouseout(function(e){front.reset(false);})
+  };
+  
+  appController = function(){
+  	this.highlight = function(state){
+	   if (state !== "mi"){ var special = false }else{ var special = true; };
+	   formView.highlightState(state);
+       mapView.highlight(state, officerLookup[state].states, special);
+  	};
+  	
+  	this.choose = function(state){
+	   mapView.chooseState(state);
+	   if (state !== "mi"){
+          new modal(officerLookup[state].id);
+       } else {
+	 	  michiganModal();
+       };
+  	}
+
+  	this.reset = function(formReset){
+  	   if (formReset){
+  	      formView.reset();
+  	   }
+	   mapView.reset();
+  	};
+  };
+
     var setup = function (stte){
     	stte.color = Raphael.getColor();
     	stte[0].style.cursor = "pointer";
     	stte[0].onmousedown = function() {
-		   mapEventRouter(this.raphael.name, "click");
+		   front.choose(this.raphael.name);
 		};
-		
 		stte[0].onmouseover = function() {
 		   if (window.current != this.raphael.name && window.mapHover ) {
 		   	  window.current = this.raphael.name;
-		      mapEventRouter(this.raphael.name, "over");
+		      front.highlight(current);
 		   }
 		};
-		
 		stte[0].onmouseout = function() {
 		   window.current = null;
-		   mapEventRouter(this.raphael.name, "out");
+		   front.reset(true);
 		};
-    	
     	return stte;
     }
-  
+    
+    window.mapHover = true;
+    window.mapView = new usMapView();
+    window.formView = new drillDownFormView();
+    window.front = new appController();
+    
     states = states.map( setup );
   }
 </script>	
