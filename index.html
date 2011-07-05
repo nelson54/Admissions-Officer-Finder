@@ -814,6 +814,8 @@ var stateList = { states : [
 	},
   }
   
+
+  
   window.modal = function(id){
   	this.selector = function (id){
   		return $("#"+id);
@@ -942,27 +944,6 @@ var stateList = { states : [
     
     usRaphael = {};
     
-    new modal("title");
-
-    var source   = $("#officer-template").html();
-	var template = Handlebars.compile(source);
-
-	officerLookup = {};
-
-    for ( var officer in officerCollection ) {
-        var context = officerCollection[ officer ];
-		var html    = template(context);
-		$('div#modals').append(html);
-        for ( var state in officerCollection[officer].states){
-            officerLookup[ officerCollection[officer].states[state] ] = officerCollection[officer];
-        }(officerCollection, officerLookup)
-        
-        for ( var county in officerCollection[officer].counties){
-            officerLookup[ officerCollection[officer].counties[county] ] = officerCollection[officer];
-        }(officerCollection, officerLookup)
-        
-      }(officerCollection, officerLookup)
-    
     var states = [];
     
     //Draw Map and store Raphael paths
@@ -974,7 +955,6 @@ var stateList = { states : [
       usRaphael[state] = path;
       states.push(path);
     };
-    
     
   usMapView = function(){
   	this.defaultColor = "#d3d3d3";
@@ -1026,13 +1006,13 @@ var stateList = { states : [
   	this.highlight = function(state){
 	   if (state !== "mi"){ var special = false }else{ var special = true; };
 	   formView.highlightState(state);
-       mapView.highlight(state, officerLookup[state].states, special);
+       mapView.highlight(state, officersCollection.stateLookup[state].states, special);
   	};
   	
   	this.choose = function(state){
 	   mapView.chooseState(state);
 	   if (state !== "mi"){
-          new modal(officerLookup[state].id);
+          new modal(officersCollection.stateLookup[state].id);
        } else {
 	 	  michiganModal();
        };
@@ -1064,15 +1044,91 @@ var stateList = { states : [
 		};
     	return stte;
     }
-    
+  
+	officerModel = function(fullname, title, email, states, counties, territories, qna){
+		this.id = fullname.replace(" ", "_");
+		
+		this.title = title;
+		
+		this.email = email;
+		
+		this.states = states;
+		
+		this.counties = counties;
+		
+		this.territories = territories;
+		
+		this.qna = qna;
+	}
+	
+	stateModel = function(id, name, counties){
+		this.id = id;
+		
+		this.name = name;
+		
+		this.counties = counties;
+		
+		this.reference = undefined;
+	}
+	
+	collection = function(model){
+		this.model = model;
+		this.add = function(obj){
+			this.data.push( new this.model(obj) );
+		};
+		this.data = [];
+	}
+	
+	officersCollection = new collection(officerModel);
+	
+	officersCollection.lookup = {};
+	officersCollection.stateLookup = {};
+	officersCollection.countyLookup = {};
+	
+	officersCollection.template = Handlebars.compile( $("#officer-template").html() );
+	
+	officersCollection.add = function(fullname, title, email, states, counties, territories, qna){
+		var pointer = officersCollection.data.push( new officersCollection.model( fullname, title, email, states, counties, territories, qna ) );
+		officersCollection.data[ pointer - 1 ].reference = officersCollection.data[ pointer - 1 ];
+		officersCollection.lookup[ officersCollection.data[ pointer  - 1].id ] = officersCollection.data[ pointer - 1 ];
+		for (var s in states){
+			officersCollection.stateLookup[states[s]] = officersCollection.data[ pointer  - 1];
+		}
+		for (var c in counties){
+			officersCollection.countyLookup[counties[c]] = officersCollection.data[ pointer  - 1];
+		}
+		
+		$('div#modals').append( officersCollection.template( officersCollection.data[ pointer - 1 ] ) );
+	}
+	
+	stateCollection = new collection(stateModel);
+	
+	stateCollection.lookup = {};
+	
+	stateCollection.add = function( id, name, counties ){
+		var pointer = stateCollection.data.push( new stateCollection.model(  id, name, counties ) );
+		stateCollection.data[ pointer - 1 ].reference = stateCollection.data[ pointer - 1 ];
+		stateCollection.lookup[ stateCollection.data[ pointer - 1 ].id ] = stateCollection.data[ pointer - 1 ];
+	}
+	
+	for ( var s in stateList.states ){
+	  stateCollection.add( stateList.states[s].abbr, stateList.states[s].title )
+	}
+	
+	for ( var o in officerCollection ){
+	  officersCollection.add( officerCollection[o].fullname, officerCollection[o].title, officerCollection[o].email, officerCollection[o].states, officerCollection[o].counties, officerCollection[o].territories, officerCollection[o].qna )
+	}
+
     window.mapHover = true;
     window.mapView = new usMapView();
     window.formView = new drillDownFormView();
     window.front = new appController();
     
-    states = states.map( setup );   
+    states.map( setup );
+    
+    new modal("title");
   }
-  
+
 $(document).ready(function() {
 
 })
