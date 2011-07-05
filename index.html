@@ -931,6 +931,8 @@ var stateList = { states : [
   	
   	renderDrillDownForm();
   	
+  	
+  // START RAPHAEL CODE
     var R = Raphael("admissions_map", 1000, 600),
       attr = {
       "fill": "#d3d3d3",
@@ -955,6 +957,7 @@ var stateList = { states : [
       usRaphael[state] = path;
       states.push(path);
     };
+  // END RAPHAEL CODE
     
   usMapView = function(){
   	this.defaultColor = "#d3d3d3";
