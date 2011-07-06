@@ -337,7 +337,7 @@ div#no-menu-content {
         	    <h2>{{title}}</h2>
         	    <p class="contact">Contact {{firstname}} at <a href="mailto:{{email}}">{{email}}</a></p>
                 <h4>Territory:</h4>
-        	    <p class="territory">{{territorys}}</p>
+        	    <p class="territory">{{territory}}</p>
             </div>
         </div>
         <div class="office-head-bottom">
@@ -362,777 +362,369 @@ div#no-menu-content {
 <script type="text/javascript" src="raphael-min.js"></script>
 <script type="text/javascript" src="us-map-svg.js"></script>
 <script type="text/javascript">
+if (!Array.prototype.map) {
+    Array.prototype.map = function (fun /*, thisp */ ) {
+        "use strict";
 
-if (!Array.prototype.map)
-{
-  Array.prototype.map = function(fun /*, thisp */)
-  {
-    "use strict";
+        if (this === void 0 || this === null) throw new TypeError();
 
-    if (this === void 0 || this === null)
-      throw new TypeError();
+        var t = Object(this);
+        var len = t.length >>> 0;
+        if (typeof fun !== "function") throw new TypeError();
 
-    var t = Object(this);
-    var len = t.length >>> 0;
-    if (typeof fun !== "function")
-      throw new TypeError();
+        var res = new Array(len);
+        var thisp = arguments[1];
+        for (var i = 0; i < len; i++) {
+            if (i in t) res[i] = fun.call(thisp, t[i], i, t);
+        }
 
-    var res = new Array(len);
-    var thisp = arguments[1];
-    for (var i = 0; i < len; i++)
-    {
-      if (i in t)
-        res[i] = fun.call(thisp, t[i], i, t);
-    }
-
-    return res;
-  };
+        return res;
+    };
 }
 
-var stateList = { states : [
-  {
-	abbr:"AK",
-	title:"Alaska"
-  },
-  {
-	abbr:"AL",
-    title:"Alabama"
-  },
-  {
-	abbr:"AR",
-    title:"Arkansas"
-  },
-  {
-	abbr:"AS",
-    title:"American Samoa"
-  },
-  {
-	abbr:"AZ",
-    title:"Arizona"
-  },
-  {
-	abbr:"CA",
-    title:"California"
-  },
-  {
-	abbr:"CO",
-    title:"Colorado"
-  },
-  {
-	abbr:"CT",
-    title:"Connecticut"
-  },
-  {
-	abbr:"DC",
-    title:"D.C."
-  },
-  {
-	abbr:"DE",
-    title:"Delaware"
-  },
-  {
-	abbr:"FL",
-    title:"Florida"
-  },
-  {
-	abbr:"FM",
-    title:"Micronesia"
-  },
-  {
-	abbr:"GA",
-    title:"Georgia"
-  },
-  {
-	abbr:"GU",
-    title:"Guam"
-  },
-  {
-	abbr:"HI",
-    title:"Hawaii"
-  },
-  {
-	abbr:"IA",
-    title:"Iowa"
-  },
-  {
-	abbr:"ID",
-    title:"Idaho"
-  },
-  {
-	abbr:"IL",
-    title:"Illinois"
-  },
-  {
-	abbr:"IN",
-    title:"Indiana"
-  },
-  {
-	abbr:"KS",
-    title:"Kansas"
-  },
-  {
-	abbr:"KY",
-    title:"Kentucky"
-  },
-  {
-	abbr:"LA",
-    title:"Louisiana"
-  },
-  {
-	abbr:"MA",
-    title:"Massachusetts"
-  },
-  {
-	abbr:"MD",
-    title:"Maryland"
-  },
-  {
-	abbr:"ME",
-    title:"Maine"
-  },
-  {
-	abbr:"MH",
-    title:"Marshall Islands"
-  },
-  {
-	abbr:"MI",
-    title:"Michigan",
-    counties : [ "Alcona", "Alger", "Allegan", "Alpena", "Antrim", "Arenac", "Baraga", "Barry", "Bay", "Benzie", "Berrien", "Branch", "Calhoun", "Cass", "Charlevoix", "Cheboygan", "Chippewa", "Clare", "Clinton", "Crawford", "Delta", "Dickinson", "Eaton", "Emmet", "Genesee", "Gladwin", "Gogebic", "Grand Traverse", "Gratiot", "Hillsdale", "Houghton", "Huron", "Ingham", "Ionia", "Iosco", "Iron", "Isabella", "Jackson", "Kalamazoo", "Kalkaska", "Kent", "Keweenaw", "Lake", "Lapeer", "Leelanau", "Lenawee", "Livingston", "Luce", "Mackinac", "Macomb", "Manistee", "Marquette", "Mason", "Mecosta", "Menominee", "Midland", "Missaukee", "Monroe", "Montcalm", "Montmorency", "Muskegon", "Newaygo", "Oakland", "Oceana", "Ogemaw", "Ontonagon", "Osceola", "Oscoda", "Otsego", "Ottawa", "Presque Isle", "Roscommon", "Saginaw", "Sanilac", "Schoolcraft", "Shiawassee", "St. Clair", "St. Joseph", "Tuscola", "Van Buren", "Washtenaw", "Wayne", "Wexford" ]
-  },
-  {
-	abbr:"MN",
-    title:"Minnesota"
-  },
-  {
-	abbr:"MO",
-    title:"Missouri"
-  },
-  {
-	abbr:"MP",
-    title:"Marianas"
-  },
-  {
-	abbr:"MS",
-    title:"Mississippi"
-  },
-  {
-	abbr:"MT",
-    title:"Montana"
-  },
-  {
-	abbr:"NC",
-    title:"North Carolina"
-  },
-  {
-	abbr:"ND",
-    title:"North Dakota"
-  },
-  {
-	abbr:"NE",
-    title:"Nebraska"
-  },
-  {
-	abbr:"NH",
-    title:"New Hampshire"
-  },
-  {
-	abbr:"NJ",
-    title:"New Jersey"
-  },
-  {
-	abbr:"NM",
-    title:"New Mexico"
-  },
-  {
-	abbr:"NV",
-    title:"Nevada"
-  },
-  {
-	abbr:"NY",
-    title:"New York"
-  },
-  {
-	abbr:"OH",
-    title:"Ohio"
-  },
-  {
-	abbr:"OK",
-    title:"Oklahoma"
-  },
-  {
-	abbr:"OR",
-    title:"Oregon"
-  },
-  {
-	abbr:"PA",
-    title:"Pennsylvania"
-  },
-  {
-	abbr:"PR",
-    title:"Puerto Rico"
-  },
-  {
-	abbr:"PW",
-    title:"Palau"
-  },
-  {
-	abbr:"RI",
-    title:"Rhode Island"
-  },
-  {
-	abbr:"SC",
-    title:"South Carolina"
-  },
-  {
-	abbr:"SD",
-    title:"South Dakota"
-  },
-  {
-	abbr:"TN",
-    title:"Tennessee"
-  },
-  {
-	abbr:"TX",
-    title:"Texas"
-  },
-  {
-	abbr:"UT",
-    title:"Utah"
-  },
-  {
-	abbr:"VA",
-    title:"Virginia"
-  },
-  {
-	abbr:"VI",
-    title:"Virgin Islands"
-  },
-  {
-	abbr:"VT",
-    title:"Vermont"
-  },
-  {
-	abbr:"WA",
-    title:"Washington"
-  },
-  {
-	abbr:"WI",
-    title:"Wisconsin"
-  },
-  {
-	abbr:"WV",
-    title:"West Virginia"
-  },
-  {
-	abbr:"WY",
-    title:"Wyoming"
-  } ]
+var stateList={states:[{abbr:"AK",title:"Alaska"},{abbr:"AL",title:"Alabama"},{abbr:"AR",title:"Arkansas"},{abbr:"AS",title:"American Samoa"},{abbr:"AZ",title:"Arizona"},{abbr:"CA",title:"California"},{abbr:"CO",title:"Colorado"},{abbr:"CT",title:"Connecticut"},{abbr:"DC",title:"D.C."},{abbr:"DE",title:"Delaware"},{abbr:"FL",title:"Florida"},{abbr:"FM",title:"Micronesia"},{abbr:"GA",title:"Georgia"},{abbr:"GU",title:"Guam"},{abbr:"HI",title:"Hawaii"},{abbr:"IA",title:"Iowa"},{abbr:"ID",title:"Idaho"},{abbr:"IL",title:"Illinois"},{abbr:"IN",title:"Indiana"},{abbr:"KS",title:"Kansas"},{abbr:"KY",title:"Kentucky"},{abbr:"LA",title:"Louisiana"},{abbr:"MA",title:"Massachusetts"},{abbr:"MD",title:"Maryland"},{abbr:"ME",title:"Maine"},{abbr:"MH",title:"Marshall Islands"},{abbr:"MI",title:"Michigan",counties:["Alcona","Alger","Allegan","Alpena","Antrim","Arenac","Baraga","Barry","Bay","Benzie","Berrien","Branch","Calhoun","Cass","Charlevoix","Cheboygan","Chippewa","Clare","Clinton","Crawford","Delta","Dickinson","Eaton","Emmet","Genesee","Gladwin","Gogebic","Grand Traverse","Gratiot","Hillsdale","Houghton","Huron","Ingham","Ionia","Iosco","Iron","Isabella","Jackson","Kalamazoo","Kalkaska","Kent","Keweenaw","Lake","Lapeer","Leelanau","Lenawee","Livingston","Luce","Mackinac","Macomb","Manistee","Marquette","Mason","Mecosta","Menominee","Midland","Missaukee","Monroe","Montcalm","Montmorency","Muskegon","Newaygo","Oakland","Oceana","Ogemaw","Ontonagon","Osceola","Oscoda","Otsego","Ottawa","Presque Isle","Roscommon","Saginaw","Sanilac","Schoolcraft","Shiawassee","St. Clair","St. Joseph","Tuscola","Van Buren","Washtenaw","Wayne","Wexford"]},{abbr:"MN",title:"Minnesota"},{abbr:"MO",title:"Missouri"},{abbr:"MP",title:"Marianas"},{abbr:"MS",title:"Mississippi"},{abbr:"MT",title:"Montana"},{abbr:"NC",title:"North Carolina"},{abbr:"ND",title:"North Dakota"},{abbr:"NE",title:"Nebraska"},{abbr:"NH",title:"New Hampshire"},{abbr:"NJ",title:"New Jersey"},{abbr:"NM",title:"New Mexico"},{abbr:"NV",title:"Nevada"},{abbr:"NY",title:"New York"},{abbr:"OH",title:"Ohio"},{abbr:"OK",title:"Oklahoma"},{abbr:"OR",title:"Oregon"},{abbr:"PA",title:"Pennsylvania"},{abbr:"PR",title:"Puerto Rico"},{abbr:"PW",title:"Palau"},{abbr:"RI",title:"Rhode Island"},{abbr:"SC",title:"South Carolina"},{abbr:"SD",title:"South Dakota"},{abbr:"TN",title:"Tennessee"},{abbr:"TX",title:"Texas"},{abbr:"UT",title:"Utah"},{abbr:"VA",title:"Virginia"},{abbr:"VI",title:"Virgin Islands"},{abbr:"VT",title:"Vermont"},{abbr:"WA",title:"Washington"},{abbr:"WI",title:"Wisconsin"},{abbr:"WV",title:"West Virginia"},{abbr:"WY",title:"Wyoming"}]};
+
+officerCollection={1:{id:"Paul_Kwant",fullname:"Paul Kwant",firstname:"Paul",image:"images/PaulKwant.jpg",title:"SENIOR RECRUITING OFFICER",email:"person1@host.com",states:["ak","hi","wa","or","ca","id","nv","az","mt","wy","co","ut","nm"],counties:["Gladwin","Midland","Bay","Huron","Saginaw","Sanilac","Gratiot","Tuscola","Arenac","Clare","Isabella","Montcalm"],territory:"Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",qna:[{question:"Why did you pick Ferris?",answer:"I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"},{question:"What makes Ferris standout over other schools?",answer:"There are many activities that students can get involved in while on-campus. One worth checking out is our Student Ambassador Organization. Our Student Ambassadors are an integral part of our admissions team and have a lot of fun while assisting our campus visitors!"},{question:"What advice would you give to an incoming Freshman/Transfer Student?",answer:"I recommend that you get involved and make new friends while here on campus. Life is way too short to stay in your Residence Hall room by yourself. Hang out at Starbucks, or attend a Hockey game. Your time here on campus is what you make of it! Get out there! One of my favorite things to do on campus is participate in the Homecoming game tailgate festivities. The College of Engineering Technology Chili Cook-off rocks!"},{question:"When you are not recruiting students what do you do in your past time?",answer:"When not recruiting students, I enjoy spending time with my family, watching movies, Detroit Red Wing hockey, and playing my guitars."}]},2:{id:"Krista_Hansen",fullname:"Krista Hansen",firstname:"Krista",image:"images/KristaHansen.jpg",title:"Recruiter / Financial Aid Officer",email:"hansenk8@ferris.edu",states:["ks","ok","tx","nd","sd","ne","mn","ia","mo","ar","la"],counties:["Allegan","St. Joseph","Kalamazoo","Berrien","Cass","Van Buren"],territory:"Allegan, St. Joseph, Kalamazoo, Berrien, Cass, Van Buren & the state of Illinois",bio:"Hello, my name is Krista Hansen originally from Battle Creek, I am now happy to live in St. Joseph near Lake Michigan's beautiful beaches. I earned my Bachelor of Music Education degree in 2003 and spent four years teaching instrumental music in the public schools.<br />Please don't hesitate to contact me with any questions regarding the admission or financial aid processes. If you\'d like to set up a meeting with me, my office is conveniently located at our branch campus in Dowagiac on the campus of Southwestern Michigan College.",qna:[{question:"What is the one item you would encourage students to check out at Ferris before graduating?",answer:"Take a serious look at our study away programs. You have a chance to spend a semester or a year in another country while earning credits toward your degree. It is surprisingly affordable and a life changing experience!"},{question:"When you are not recruiting students what do you do in your past time?",answer:"I enjoy music, writing, reading, and spending time with my friends and family."},{question:"What advice would you give to an incoming Freshman/Transfer Student?",answer:"Get involved with activities on campus. Whether you're into sports or music, politics or Greek life, there really is something for everyone here. You will meet people and enjoy your college experience so much more if you get involved in activities that interest you."},{question:"Favorite thing to do in Big Rapids?",answer:"Canoeing or floating in a tube down the Muskegon River with a group of friends."},{question:"Favorite Spot on Campus?",answer:"My favorite spot on campus is the Rock Dining Center. I have eaten at many different campus dining facilities and I will tell you that the food at Ferris is truly exceptional.  You won't go hungry!"}]},3:{id:"Amber_Balmer",fullname:"Amber Balmer",firstname:"Amber",image:"images/adminofficer_180.jpg",title:"Recruiting Officer",email:"balmera@ferris.edu",states:["wi","il","ms","mi","ind","ky","tn","al","oh","ga","fl"],counties:["Kent"],territory:"Kent County & The state of Missouri.",qna:[{question:"What is your favorite tradition at Ferris?",answer:"My favorite tradition at Ferris is Homecoming. It's the best time of year and I get to see all my long lost friends."},{question:"What makes Ferris standout over other schools?",answer:"Ferris is a fun loving community that works together. This school provides unique opportunities to all students and promotes individual growth. Ferris stands out above the rest because the amazing student body, faculty, and administration."},{question:"What is the one item you would encourage students to check out at Ferris before graduating?",answer:"The one thing a student must check out before they graduate from Ferris State is a Student Government Association meeting! Student Government is dear to my heart and provided me an \"out of class room\" education."},{question:"When you are not recruiting students what do you do in your past time?",answer:"In my free time I like to brush up on new trends in social media, read read read, cook, garden, and try new things like yoga!"},{question:"What advice you would give to an incoming Freshman/Transfer Student?",answer:"My advice to an incoming student is take advantage of all the on campus activities and organizations. There is so much to do on campus... see the comedians, watch a movie in the quad, join a professional organization, be a student ambassador, eat pancakes until you fall over at Pancakes with the president, and have fun!!"},{question:"Favorite thing to do in Big Rapids?",answer:"My favorite thing to do in Big Rapids...that's a tie between eating lemon sorbet in a waffle cone at the Old Pioneer Store and Tubing down the river in the middle of July! (I just had a thought I should try both at the same time)"},{question:"Favorite Spot on Campus?",answer:"My favorite spot on campus is the clock tower at noon! It makes me proud to be a bulldog!"}]},4:{id:"Natalia_Carvalho_Pinto",fullname:"Natalia Carvalho-Pinto",firstname:"Natalia",image:"images/adminofficer_180.jpg",title:"Recruiting Officer",email:"carv9@ferris.edu",states:["ny","pa","md","wv","va","nc","sc","me","nh","vt","ma","ri","ct","nj","de"],counties:["Mecosta","Mason","Lake","Newaygo","Muskegon","Ottawa","Osceola","Oceana"],territory:"Mecosta, Mason, Lake, Newaygo, Muskegon, Ottawa, Osceola, Oceana & the state of California",qna:[{question:"Why did you pick Ferris?",answer:"Originally from Sao-Paulo, Brazil, I first came to Ferris as an International Student to study English for one year, but I quickly realized that Ferris was a great fit for me.  I loved campus life and campus events, found my fit and made friends through the Student Organizations and Athletic Events, and learned that I could succeed academically here through all the resources available to students, such as our SLA program, tutoring center and career counseling.  I am happy to say now that Ferris has been my home for the last 8 years.  I love working with students and their families, and helping them take their first steps towards a college degree and their career goals."},{question:"What is your favorite memory at Ferris?",answer:"The Hockey games are great!"},{question:"What is the one item you would encourage students to check out at Ferris before graduating?",answer:"A hockey game. The Rock dining facility.  Homecoming week activities.  The International Festival of Cultures."},{question:"What advice would you give to an incoming Freshman/Transfer Student?",answer:"Get Involved.  Participate in as many student organizations and campus events as you are able to...  There are great things to do at Ferris.  Getting involved will make your college experience a lot more complete, more educational, fuller, and a lot more exciting!"},{question:"What is your favorite thing to do in Big Rapids?",answer:"Eating at Buffalo Wild Wings, tubing, and taking my daughter to the local parks."},{question:"What is your favorite spot on campus?",answer:"The Ferris Library for Information Technology and Education (FLITE).  It is one of the biggest, most complete and most beautiful libraries you will encounter in a higher education setting."}]},5:{id:"Angela_Garrey",fullname:"Angela Garrey",firstname:"Angela",image:"images/adminofficer_180.jpg",title:"Recruiter / Financial Aid Officer",email:"garreya@ferris.edu",states:["pa"],counties:["Alcona","Alger","Alpena","Baraga","Cheboygan","Chippewa","Crawford","Delta","Dickinson","Gogebic","Houghton","Iosco","Iron","Keweenaw","Luce","Mackinac","Marquette","Menominee","Montmorency","Ogemaw","Ontonagon","Oscoda","Otsego","Presque Isle","Roscommon","Schoolcraft","Antrim","Benzie","Charlevoix","Emmet","Grand Traverse","Kalkaska","Leelanau","Manistee","Missaukee","Wexford"],territory:"Alcona, Alger, Alpena, Baraga, Cheboygan, Chippewa, Crawford, Delta, Dickinson, Gogebic, Houghton, Iosco, Iron, Keweenaw, Luce, Mackinac, Marquette, Menominee, Montmorency, Ogemaw, Ontonagon, Oscoda, Otsego, Presque Isle, Roscommon, Schoolcraft, Antrim, Benzie, Charlevoix, Emmet, Grand Traverse, Kalkaska, Leelanau, Manistee, Missaukee, Wexford & the state of Pennsylvania",qna:[{question:"Why Did You Pick Ferris?",answer:"I picked Ferris for a numerous reasons, but the number one reason it is fit me! The mid size campus, the faculty and the community of Ferris made me feel at like I was coming home."},{question:"What is your favorite memory of Ferris?",answer:"My favorite memory of Ferris would probably be when I met my now husband (we have the same birthday)."},{question:"What is your favorite tradition of Ferris?",answer:"My favorite tradition at Ferris would have to be all sorority rush. Watching young ladies open their bid cards is a tradition like no other it gives you a sense of pride of being in an organization with so many great young women."},{question:"What makes Ferris standout over other schools?",answer:"Ferris stands out compared to other schools with its peeps. I don't mean the candy, I mean all the amazing people who create the university. The students, the faculty, and the staff everyone you interact with on a day to day basis make you a better person and a better student."},{question:"The one item you encourage student to check out at Ferris before graduating?",answer:"The third floor of the Timme Center."},{question:"Advice you would give to an incoming Freshman/Transfer Student?",answer:"My advice to students coming in as a freshman or a transfer student is to use all the resources on campus available to you. Getting involved with the RSO's, going to sporting events, enjoying the restaurants of Big Rapids, knowing your faculty, taking a class SLA, find out more about the history of the institution, all of which are accessible to students."},{question:"What is your favorite thing to do in Big Rapids?",answer:"Going out to SCHUBERG'S with good friends, I have my own booth."},{question:"What is your Favorite Spot on Campus?",answer:"My favorite spot on campus would be the alumni building. It is where it all began and looking at the tile mosaic of the institutions true foundation is a great way to take pride in being a Ferris State Bulldog."},]},6:{id:"Chris_Higley",fullname:"Chris Higley",firstname:"Chris",image:"images/adminofficer_180.jpg",title:"Admissions Officer",email:"carv9@ferris.edu",states:["ia"],counties:["Barry","Eaton","Ingham","Calhoun","Jackson","Washtenaw","Branch","Hillsdale","Lenawee","Ionia","Clinton","Shiawassee"],territory:"Barry, Eaton, Ingham, Calhoun, Jackson, Washtenaw, Branch, Hillsdale, Lenawee, Ionia, Clinton, Shiawassee & the state of Lowa",qna:[{question:"Why did you pick Ferris",answer:"I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"}]},7:{id:"Tyrone_Collins",fullname:"Tyrone Collins",firstname:"Tyrone",image:"images/adminofficer_180.jpg",title:"Admissions Counselor",email:"collinst@ferris.edu",states:["ca"],counties:["Macomb","Monroe","Wayne"],territory:"Macomb, Monroe, Wayne & the state of California",qna:[{question:"Why did you pick Ferris",answer:"I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"}]},8:{id:"Leah_Goode",fullname:"Leah Goode",firstname:"Leah",image:"images/adminofficer_180.jpg",title:"Recruiting Officer",email:"goodel@ferris.edu",states:["fl"],counties:["Genesee","Lapeer","St. Clair","Oakland","Livingston"],territory:"Genesee, Lapeer, St. Clair, Oakland, Livingston & the state of Florida",qna:[{question:"Why did you pick Ferris",answer:"I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"}]},9:{id:"Angie_Mishler",fullname:"Angie Mishler",firstname:"Angie",image:"images/adminofficer_180.jpg",title:"Senior Recruiting Officer",email:"mishlera@ferris.edu",states:[],counties:["Osceola","Mecosta","Isabella","Kent","Montcalm"],territory:"Mecosta, Mason, Lake, Newaygo, Muskegon, Ottawa, Osceola, Oceana & the state of California",qna:[{question:"Why did you pick Ferris",answer:"I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"}]},}
+
+window.modal = function (id) {
+    this.selector = function (id) {
+        return $("#" + id);
+    };
+
+    this.clickHandler = function (id, func) {
+        $("a.close").click(function () {
+            func(id)
+        });
+    };
+
+    this.show = function (id) {
+        $("a.close").click();
+        this.selector(id).show();
+        location.hash = id;
+        $('.office-head-bottom').cycle({
+            fx: 'fade',
+            next: '.next',
+            prev: '.prev'
+        });
+    };
+
+    this.hide = function (id) {
+        front.reset();
+        id.hide();
+        location.hash = "";
+    };
+
+    this.show(id);
+
+    this.clickHandler(this.selector(id), this.hide);
 };
-  
-  officerCollection = {
-    1 : {
-		id : "Paul_Kwant",
-  		fullname : "Paul Kwant",
-		firstname : "Paul",
-		image : "images/PaulKwant.jpg",
-		title : "SENIOR RECRUITING OFFICER",
-  		email : "person1@host.com",
-  		states : [ "ak","hi", "wa", "or", "ca", "id","nv","az","mt","wy","co","ut","nm" ],
-    	counties : [ "Gladwin", "Midland", "Bay", "Huron", "Saginaw", "Sanilac", "Gratiot", "Tuscola", "Arenac", "Clare", "Isabella", "Montcalm" ],
-		territorys : "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
-		qna : [ 
-			{question : "Why did you pick Ferris?",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ,
-			{question : "What makes Ferris standout over other schools?",
-			answer : "There are many activities that students can get involved in while on-campus. One worth checking out is our Student Ambassador Organization. Our Student Ambassadors are an integral part of our admissions team and have a lot of fun while assisting our campus visitors!"},
-			{question : "What advice would you give to an incoming Freshman/Transfer Student?",
-			answer : "I recommend that you get involved and make new friends while here on campus. Life is way too short to stay in your Residence Hall room by yourself. Hang out at Starbucks, or attend a Hockey game. Your time here on campus is what you make of it! Get out there! One of my favorite things to do on campus is participate in the Homecoming game tailgate festivities. The College of Engineering Technology Chili Cook-off rocks!"},
-			{question : "When you are not recruiting students what do you do in your past time?",
-			answer : "When not recruiting students, I enjoy spending time with my family, watching movies, Detroit Red Wing hockey, and playing my guitars."}
-			]
-	},
-    2 : {
-    	id : "Krista_Hansen",
-  		fullname : "Krista Hansen",
-		firstname : "Krista",
-		image : "images/KristaHansen.jpg",
-		title : "Recruiter / Financial Aid Officer",
-  		email : "hansenk8@ferris.edu",
-  		states : [ "ks","ok","tx","nd","sd","ne","mn","ia","mo","ar","la" ],
-  		counties : ["Allegan", "St. Joseph", "Kalamazoo", "Berrien", "Cass", "Van Buren"],
-		territorys : "Allegan, St. Joseph, Kalamazoo, Berrien, Cass, Van Buren & the state of Illinois",
-		bio : "Hello, my name is Krista Hansen originally from Battle Creek, I am now happy to live in St. Joseph near Lake Michigan's beautiful beaches. I earned my Bachelor of Music Education degree in 2003 and spent four years teaching instrumental music in the public schools.<br />Please don't hesitate to contact me with any questions regarding the admission or financial aid processes. If you\'d like to set up a meeting with me, my office is conveniently located at our branch campus in Dowagiac on the campus of Southwestern Michigan College.",
-		qna : [ 
-		    {question : "What is the one item you would encourage students to check out at Ferris before graduating?",
-			answer : "Take a serious look at our study away programs. You have a chance to spend a semester or a year in another country while earning credits toward your degree. It is surprisingly affordable and a life changing experience!"},
-			{question : "When you are not recruiting students what do you do in your past time?",
-			answer : "I enjoy music, writing, reading, and spending time with my friends and family."},
-			{question : "What advice would you give to an incoming Freshman/Transfer Student?",
-			answer : "Get involved with activities on campus. Whether you're into sports or music, politics or Greek life, there really is something for everyone here. You will meet people and enjoy your college experience so much more if you get involved in activities that interest you."},
-			{question : "Favorite thing to do in Big Rapids?",
-			answer : "Canoeing or floating in a tube down the Muskegon River with a group of friends."},
-			{question : "Favorite Spot on Campus?",
-			answer : "My favorite spot on campus is the Rock Dining Center. I have eaten at many different campus dining facilities and I will tell you that the food at Ferris is truly exceptional.  You won't go hungry!"}
-		]
-	},
-    3 : {
-        id : "Amber_Balmer",
-  		fullname : "Amber Balmer",
-		firstname : "Amber",
-		image : "images/adminofficer_180.jpg",
-		title : "Recruiting Officer",
-  		email : "balmera@ferris.edu",
-  		states : [ "wi","il","ms","mi","ind","ky","tn","al","oh","ga","fl" ],
-  		counties : ["Kent"],
-		territorys : "Kent County & The state of Missouri.",
-		qna : [
-			{question : "What is your favorite tradition at Ferris?",
-			answer : "My favorite tradition at Ferris is Homecoming. It's the best time of year and I get to see all my long lost friends."},
-			{question : "What makes Ferris standout over other schools?",
-			answer : "Ferris is a fun loving community that works together. This school provides unique opportunities to all students and promotes individual growth. Ferris stands out above the rest because the amazing student body, faculty, and administration."},
-			{question : "What is the one item you would encourage students to check out at Ferris before graduating?",
-			answer : "The one thing a student must check out before they graduate from Ferris State is a Student Government Association meeting! Student Government is dear to my heart and provided me an \"out of class room\" education."},
-			{question : "When you are not recruiting students what do you do in your past time?",
-			answer : "In my free time I like to brush up on new trends in social media, read read read, cook, garden, and try new things like yoga!"},
-			{question : "What advice you would give to an incoming Freshman/Transfer Student?",
-			answer : "My advice to an incoming student is take advantage of all the on campus activities and organizations. There is so much to do on campus... see the comedians, watch a movie in the quad, join a professional organization, be a student ambassador, eat pancakes until you fall over at Pancakes with the president, and have fun!!"},
-			{question : "Favorite thing to do in Big Rapids?",
-			answer : "My favorite thing to do in Big Rapids...that's a tie between eating lemon sorbet in a waffle cone at the Old Pioneer Store and Tubing down the river in the middle of July! (I just had a thought I should try both at the same time)"},
-			{question : "Favorite Spot on Campus?",
-			answer : "My favorite spot on campus is the clock tower at noon! It makes me proud to be a bulldog!"}
-		]
-	},
-    4 : {
-        id : "Natalia_Carvalho_Pinto",
-      	fullname : "Natalia Carvalho-Pinto",
-		firstname : "Natalia",
-		image : "images/adminofficer_180.jpg",
-		title : "Recruiting Officer",
-  		email : "carv9@ferris.edu",
-  		states : [ "ny","pa","md","wv","va","nc","sc","me","nh","vt","ma","ri","ct","nj","de" ],
-  		counties : ["Mecosta", "Mason", "Lake", "Newaygo", "Muskegon", "Ottawa", "Osceola", "Oceana"],
-		territorys : "Mecosta, Mason, Lake, Newaygo, Muskegon, Ottawa, Osceola, Oceana & the state of California",
-		qna : [ 
-			{question : "Why did you pick Ferris?",
-			answer : "Originally from Sao-Paulo, Brazil, I first came to Ferris as an International Student to study English for one year, but I quickly realized that Ferris was a great fit for me.  I loved campus life and campus events, found my fit and made friends through the Student Organizations and Athletic Events, and learned that I could succeed academically here through all the resources available to students, such as our SLA program, tutoring center and career counseling.  I am happy to say now that Ferris has been my home for the last 8 years.  I love working with students and their families, and helping them take their first steps towards a college degree and their career goals."},
-			{question : "What is your favorite memory at Ferris?",
-			answer : "The Hockey games are great!"},
-			{question : "What is the one item you would encourage students to check out at Ferris before graduating?",
-			answer : "A hockey game. The Rock dining facility.  Homecoming week activities.  The International Festival of Cultures."},
-			{question : "What advice would you give to an incoming Freshman/Transfer Student?",
-			answer : "Get Involved.  Participate in as many student organizations and campus events as you are able to...  There are great things to do at Ferris.  Getting involved will make your college experience a lot more complete, more educational, fuller, and a lot more exciting!"},
-			{question : "What is your favorite thing to do in Big Rapids?",
-			answer : "Eating at Buffalo Wild Wings, tubing, and taking my daughter to the local parks."},
-			{question : "What is your favorite spot on campus?",
-			answer : "The Ferris Library for Information Technology and Education (FLITE).  It is one of the biggest, most complete and most beautiful libraries you will encounter in a higher education setting."}
-		]	
-	},
-    5 : {
-        id : "Angela_Garrey",
-      	fullname : "Angela Garrey",
-		firstname : "Angela",
-		image : "images/adminofficer_180.jpg",
-		title : "Recruiter / Financial Aid Officer",
-  		email : "garreya@ferris.edu",
-  		states : [ "pa" ],
-  		counties : ["Alcona", "Alger", "Alpena", "Baraga", "Cheboygan", "Chippewa", "Crawford", "Delta", "Dickinson", "Gogebic", "Houghton", "Iosco", "Iron", "Keweenaw", "Luce", "Mackinac", "Marquette", "Menominee", "Montmorency", "Ogemaw", "Ontonagon", "Oscoda", "Otsego", "Presque Isle", "Roscommon", "Schoolcraft", "Antrim", "Benzie", "Charlevoix", "Emmet", "Grand Traverse", "Kalkaska", "Leelanau", "Manistee", "Missaukee", "Wexford"],
-		territorys : "Alcona, Alger, Alpena, Baraga, Cheboygan, Chippewa, Crawford, Delta, Dickinson, Gogebic, Houghton, Iosco, Iron, Keweenaw, Luce, Mackinac, Marquette, Menominee, Montmorency, Ogemaw, Ontonagon, Oscoda, Otsego, Presque Isle, Roscommon, Schoolcraft, Antrim, Benzie, Charlevoix, Emmet, Grand Traverse, Kalkaska, Leelanau, Manistee, Missaukee, Wexford & the state of Pennsylvania",
-		qna : [ 
-			{question : "Why Did You Pick Ferris?",
-			answer : "I picked Ferris for a numerous reasons, but the number one reason it is fit me! The mid size campus, the faculty and the community of Ferris made me feel at like I was coming home."},
-			{question : "What is your favorite memory of Ferris?",
-			answer : "My favorite memory of Ferris would probably be when I met my now husband (we have the same birthday)."},
-			{question : "What is your favorite tradition of Ferris?",
-			answer : "My favorite tradition at Ferris would have to be all sorority rush. Watching young ladies open their bid cards is a tradition like no other it gives you a sense of pride of being in an organization with so many great young women."},
-			{question : "What makes Ferris standout over other schools?",
-			answer : "Ferris stands out compared to other schools with its peeps. I don't mean the candy, I mean all the amazing people who create the university. The students, the faculty, and the staff everyone you interact with on a day to day basis make you a better person and a better student."},
-			{question : "The one item you encourage student to check out at Ferris before graduating?",
-			answer : "The third floor of the Timme Center."},
-			{question : "Advice you would give to an incoming Freshman/Transfer Student?",
-			answer : "My advice to students coming in as a freshman or a transfer student is to use all the resources on campus available to you. Getting involved with the RSO's, going to sporting events, enjoying the restaurants of Big Rapids, knowing your faculty, taking a class SLA, find out more about the history of the institution, all of which are accessible to students."},
-			{question : "What is your favorite thing to do in Big Rapids?",
-			answer : "Going out to SCHUBERG'S with good friends, I have my own booth."},
-			{question : "What is your Favorite Spot on Campus?",
-			answer : "My favorite spot on campus would be the alumni building. It is where it all began and looking at the tile mosaic of the institutions true foundation is a great way to take pride in being a Ferris State Bulldog."},
-		]	
-	},
-    6 : {
-        id : "Chris_Higley",
-      	fullname : "Chris Higley",
-		firstname : "Chris",
-		image : "images/adminofficer_180.jpg",
-		title : "Admissions Officer",
-  		email : "carv9@ferris.edu",
-  		states : [ "ia" ],
-  		counties : ["Barry", "Eaton", "Ingham", "Calhoun", "Jackson", "Washtenaw", "Branch", "Hillsdale", "Lenawee", "Ionia", "Clinton", "Shiawassee"],
-		territorys : "Barry, Eaton, Ingham, Calhoun, Jackson, Washtenaw, Branch, Hillsdale, Lenawee, Ionia, Clinton, Shiawassee & the state of Lowa",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
-	},
-    7 : {
-        id : "Tyrone_Collins",
-      	fullname : "Tyrone Collins",
-		firstname : "Tyrone",
-		image : "images/adminofficer_180.jpg",
-		title : "Admissions Counselor",
-  		email : "collinst@ferris.edu",
-  		states : [ "ca" ],
-  		counties : ["Macomb", "Monroe", "Wayne"],
-		territorys : "Macomb, Monroe, Wayne & the state of California",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
-	},
-    8 : {
-        id : "Leah_Goode",
-      	fullname : "Leah Goode",
-		firstname : "Leah",
-		image : "images/adminofficer_180.jpg",
-		title : "Recruiting Officer",
-  		email : "goodel@ferris.edu",
-  		states : [ "fl" ],
-  		counties : ["Genesee", "Lapeer", "St. Clair", "Oakland", "Livingston"],
-		territorys : "Genesee, Lapeer, St. Clair, Oakland, Livingston & the state of Florida",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
-	},
-	9 : {
-        id : "Angie_Mishler",
-      	fullname : "Angie Mishler",
-		firstname : "Angie",
-		image : "images/adminofficer_180.jpg",
-		title : "Senior Recruiting Officer",
-  		email : "mishlera@ferris.edu",
-  		states : [  ],
-  		counties : ["Osceola", "Mecosta", "Isabella", "Kent", "Montcalm"],
-		territorys : "Mecosta, Mason, Lake, Newaygo, Muskegon, Ottawa, Osceola, Oceana & the state of California",
-		qna : [ {
-			question : "Why did you pick Ferris",
-			answer : "I selected Ferris as my Alma matter because of the practical educational opportunities the school provides. Ferris State University offers many innovative majors, small classes and hands-on teaching. I am proud that we are focused on assisting students with their career goals. Ferris State University has played an important role in my family history. My father worked here for 30 years before retiring. My wife, brother, sisters, and sister-in-law have all attended Ferris as students as well"} ]
-	},
-  }
-  
 
-  
-  window.modal = function(id){
-  	this.selector = function (id){
-  		return $("#"+id);
-  	};
-  	
-  	this.clickHandler = function(id, func){
-  		$("a.close").click(function(){func(id)});
-  	};
-  	
-  	this.show = function(id){
-  		$("a.close").click();
-  		this.selector(id).show();
-  		$('.office-head-bottom').cycle({fx: 'fade', next: '.next', prev:'.prev' });
-  	};
-  	
-  	this.hide = function(id){
-  		front.reset();
-  		id.hide();
-  		/*location.hash = "";*/
-  	};
-  	
-  	this.show(id);
-  	
-  	this.clickHandler(this.selector(id), this.hide);
-  };
-  
-  function initStateAbbrLookUp(){
-  	var StateAbbrLookUp = {};
-  	for(state in stateList.states){
-  		StateAbbrLookUp[stateList.states[state].abbr] = stateList.states[state];
-  	}(StateAbbrLookUp, stateList)
-  	return (StateAbbrLookUp);
-  }
-  
-  function michiganModal(){
-  	var drillDownSource   = $("#modal-form-template").html();
-	var drillDownTemplate = Handlebars.compile(drillDownSource);
-	var drillDownContext = {};
-	
-	drillDownContext['county'] = stateAbbrLookUp["MI"]["counties"];
-	var drillDownHtml = drillDownTemplate(drillDownContext);
-	
-	$("#modals").prepend( drillDownHtml );
-	
-	new modal("modal-form");
-	
-	$("form#modal-form-county-search select[name='counties']").change(function(){
-		new modal( officerLookup[$("form#modal-form-county-search select[name='counties']").val()].id );
-		return false;
-	})
-	return false;
-  }
-  
-  function renderDrillDownForm(state){
-  	var drillDownSource   = $("#drilldown-form-template").html();
-	var drillDownTemplate = Handlebars.compile(drillDownSource);
-	var drillDownContext = stateList;
-	
-	if (state){
-		$("form#drillDown select[name='states'] option[value='"+state+"']").attr("selected","selected");
-		drillDownContext['county'] = stateAbbrLookUp[state]["counties"];
-	} else {
-		drillDownContext['county'] = [];
-	}
-	
-	var drillDownHtml = drillDownTemplate(drillDownContext);
-	$("#drilldowndiv").remove();
-	$("#no-menu-content").prepend( drillDownHtml );
-	
-	if (state){
-		$("form#drillDown select[name='states'] option[value='"+state+"']").attr("selected","selected");
-	}
-	
-	$("form#drillDown select[name='states']").change(function(){
-		renderDrillDownForm($("form#drillDown select[name='states']").val());
-		
-		var state = $("form#drillDown select[name='states']").val().toLowerCase();
-		
-		for(stte in usRaphael){
-           usRaphael[ stte ].animate({fill: "#d3d3d3"}, 100);
-        }
-		
-		if (state === "mi"){
-			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#cc0033"}, 100);
-			michiganModal();
-		} else {
-			window.usRaphael[ $("form#drillDown select[name='states']").val().toLowerCase() ].animate({fill: "#777"}, 100);
-			new modal( officerLookup[ $( "form#drillDown select[name='states']" ).val().toLowerCase()].id );
-			
-		}
+function initStateAbbrLookUp() {
+    var StateAbbrLookUp = {};
+    for (state in stateList.states) {
+        StateAbbrLookUp[stateList.states[state].abbr] = stateList.states[state];
+    }(StateAbbrLookUp, stateList)
+    return (StateAbbrLookUp);
+}
 
-	});
-	
-	$("form#drillDown").submit(function(){
-		var item = $("form#drillDown select[name='counties']").val();
-		
-		if (item === "none"){
-			var item = $("form#drillDown select[name='states']").val().toLowerCase();
-		}
-		
-		if (item != "mi"){
-			new modal(officerLookup[item].id);
-		}else{
-			michiganModal();
-		}
+function michiganModal() {
+    var drillDownSource = $("#modal-form-template").html();
+    var drillDownTemplate = Handlebars.compile(drillDownSource);
+    var drillDownContext = {};
+
+    drillDownContext['county'] = stateAbbrLookUp["MI"]["counties"];
+    var drillDownHtml = drillDownTemplate(drillDownContext);
+
+    $("#modals").prepend(drillDownHtml);
+
+    new modal("modal-form");
+
+    $("form#modal-form-county-search select[name='counties']").change(function () {
+        new modal(officersCollection.countyLookup[$("form#modal-form-county-search select[name='counties']").val()].id);
         return false;
-	});
-  }
+    })
+    return false;
+}
 
-  stateAbbrLookUp = initStateAbbrLookUp();
+function renderDrillDownForm(state) {
+    var drillDownSource = $("#drilldown-form-template").html();
+    var drillDownTemplate = Handlebars.compile(drillDownSource);
+    var drillDownContext = stateList;
 
-  window.onload = function () {
-  	
-  	renderDrillDownForm();
-  	
-  	
-  // START RAPHAEL CODE
-    var R = Raphael("admissions_map", 1000, 600),
-      attr = {
-      "fill": "#d3d3d3",
-      "stroke": "#fff",
-      "stroke-opacity": "1",
-      "stroke-linejoin": "round",
-      "stroke-miterlimit": "4",
-      "stroke-width": "0.75",
-      "stroke-dasharray": "none"
-    };
-    
-    usRaphael = {};
-    
-    var states = [];
-    
-    //Draw Map and store Raphael paths
-    for (var state in usMap) {
-	  var officer = officerLookup[state];
-	  
-      var path = R.path(usMap[state]).attr(attr);
-      path.name = state;
-      usRaphael[state] = path;
-      states.push(path);
-    };
-  // END RAPHAEL CODE
-    
-  usMapView = function(){
-  	this.defaultColor = "#d3d3d3";
-  	this.highlightColor = "#777777";
-	this.sectionHighlightColor = "#bbbbbb";
-  	this.specialHighlightColor = "#CC0033";
-  	
-  	this.reset = function(){
-      for(var state in usRaphael){ usRaphael[ state ].animate({fill: mapView.defaultColor }, 100); }
-      R.safari();
-  	};
-  	
-  	this.chooseState = function(state){
-  		this.highlightState(state, false, this.specialHighlightColor);
-  	};
-
-	this.highlight = function(state, section, special){
-		if ( special === true ) { var color = this.specialHighlightColor } else { var color = this.highlightColor }
-		this.highlightSection( section );
-		this.highlightState(state, false, color);
-	};
-
-  	this.highlightSection = function( section ){
-  	  section.map( this.highlightState );
-  	};
-
-  	this.highlightState = function(state, position, color){
-  	  if ( typeof position === "number"){var color = mapView.sectionHighlightColor;}
-  	  usRaphael[ state ].animate({ fill: color }, 100);
-  	};
-  };
-  
-  drillDownFormView = function(){
-	this.highlightState = function(state){
-	  $('select[name="states"] option[value="'+state.toUpperCase()+'"]').attr("selected", "selected");
-	};
-
-    this.reset = function(){
-	  $('select[name="states"] option[value="none"]').attr("selected", "selected");
-	};
-	
-	$('select[name="states"] option').mouseenter(function(e){
-		front.highlight($(e.target).attr("value").toLowerCase());
-	})
-	$('select[name="states"] option').mouseout(function(e){front.reset(false);})
-  };
-  
-  appController = function(){
-  	this.highlight = function(state){
-	   if (state !== "mi"){ var special = false }else{ var special = true; };
-	   formView.highlightState(state);
-       mapView.highlight(state, officersCollection.stateLookup[state].states, special);
-  	};
-  	
-  	this.choose = function(state){
-	   mapView.chooseState(state);
-	   if (state !== "mi"){
-          new modal(officersCollection.stateLookup[state].id);
-       } else {
-	 	  michiganModal();
-       };
-  	}
-
-  	this.reset = function(formReset){
-  	   if (formReset){
-  	      formView.reset();
-  	   }
-	   mapView.reset();
-  	};
-  };
-
-    var setup = function (stte){
-    	stte.color = Raphael.getColor();
-    	stte[0].style.cursor = "pointer";
-    	stte[0].onmousedown = function() {
-		   front.choose(this.raphael.name);
-		};
-		stte[0].onmouseover = function() {
-		   if (window.current != this.raphael.name && window.mapHover ) {
-		   	  window.current = this.raphael.name;
-		      front.highlight(current);
-		   }
-		};
-		stte[0].onmouseout = function() {
-		   window.current = null;
-		   front.reset(true);
-		};
-    	return stte;
+    if (state) {
+        $("form#drillDown select[name='states'] option[value='" + state + "']").attr("selected", "selected");
+        drillDownContext['county'] = stateAbbrLookUp[state]["counties"];
+    } else {
+        drillDownContext['county'] = [];
     }
-  
-	officerModel = function(fullname, title, email, states, counties, territories, qna){
-		this.id = fullname.replace(" ", "_");
-		
-		this.title = title;
-		
-		this.email = email;
-		
-		this.states = states;
-		
-		this.counties = counties;
-		
-		this.territories = territories;
-		
-		this.qna = qna;
-	}
-	
-	stateModel = function(id, name, counties){
-		this.id = id;
-		
-		this.name = name;
-		
-		this.counties = counties;
-		
-		this.reference = undefined;
-	}
-	
-	collection = function(model){
-		this.model = model;
-		this.add = function(obj){
-			this.data.push( new this.model(obj) );
-		};
-		this.data = [];
-	}
-	
-	officersCollection = new collection(officerModel);
-	
-	officersCollection.lookup = {};
-	officersCollection.stateLookup = {};
-	officersCollection.countyLookup = {};
-	
-	officersCollection.template = Handlebars.compile( $("#officer-template").html() );
-	
-	officersCollection.add = function(fullname, title, email, states, counties, territories, qna){
-		var pointer = officersCollection.data.push( new officersCollection.model( fullname, title, email, states, counties, territories, qna ) );
-		officersCollection.data[ pointer - 1 ].reference = officersCollection.data[ pointer - 1 ];
-		officersCollection.lookup[ officersCollection.data[ pointer  - 1].id ] = officersCollection.data[ pointer - 1 ];
-		for (var s in states){
-			officersCollection.stateLookup[states[s]] = officersCollection.data[ pointer  - 1];
-		}
-		for (var c in counties){
-			officersCollection.countyLookup[counties[c]] = officersCollection.data[ pointer  - 1];
-		}
-		
-		$('div#modals').append( officersCollection.template( officersCollection.data[ pointer - 1 ] ) );
-	}
-	
-	stateCollection = new collection(stateModel);
-	
-	stateCollection.lookup = {};
-	
-	stateCollection.add = function( id, name, counties ){
-		var pointer = stateCollection.data.push( new stateCollection.model(  id, name, counties ) );
-		stateCollection.data[ pointer - 1 ].reference = stateCollection.data[ pointer - 1 ];
-		stateCollection.lookup[ stateCollection.data[ pointer - 1 ].id ] = stateCollection.data[ pointer - 1 ];
-	}
-	
-	for ( var s in stateList.states ){
-	  stateCollection.add( stateList.states[s].abbr, stateList.states[s].title )
-	}
-	
-	for ( var o in officerCollection ){
-	  officersCollection.add( officerCollection[o].fullname, officerCollection[o].title, officerCollection[o].email, officerCollection[o].states, officerCollection[o].counties, officerCollection[o].territories, officerCollection[o].qna )
-	}
+
+    var drillDownHtml = drillDownTemplate(drillDownContext);
+    $("#drilldowndiv").remove();
+    $("#no-menu-content").prepend(drillDownHtml);
+
+    if (state) {
+        $("form#drillDown select[name='states'] option[value='" + state + "']").attr("selected", "selected");
+    }
+
+    $("form#drillDown select[name='states']").change(function () {
+        renderDrillDownForm($("form#drillDown select[name='states']").val());
+
+        var state = $("form#drillDown select[name='states']").val().toLowerCase();
+
+        for (stte in usRaphael) {
+            usRaphael[stte].animate({
+                fill: "#d3d3d3"
+            }, 100);
+        }
+
+        if (state === "mi") {
+            window.usRaphael[$("form#drillDown select[name='states']").val().toLowerCase()].animate({
+                fill: "#cc0033"
+            }, 100);
+            michiganModal();
+        } else {
+            window.usRaphael[$("form#drillDown select[name='states']").val().toLowerCase()].animate({
+                fill: "#777"
+            }, 100);
+            new modal(officerLookup[$("form#drillDown select[name='states']").val().toLowerCase()].id);
+
+        }
+
+    });
+
+    $("form#drillDown").submit(function () {
+        var item = $("form#drillDown select[name='counties']").val();
+
+        if (item === "none") {
+            var item = $("form#drillDown select[name='states']").val().toLowerCase();
+        }
+
+        if (item != "mi") {
+            new modal(officerLookup[item].id);
+        } else {
+            michiganModal();
+        }
+        return false;
+    });
+}
+
+stateAbbrLookUp = initStateAbbrLookUp();
+
+window.onload = function () {
+
+    new modal("title");
+    renderDrillDownForm();
+
+    // START RAPHAEL CODE
+    var R = Raphael("admissions_map", 1000, 600),
+        attr = {
+            "fill": "#d3d3d3",
+            "stroke": "#fff",
+            "stroke-opacity": "1",
+            "stroke-linejoin": "round",
+            "stroke-miterlimit": "4",
+            "stroke-width": "0.75",
+            "stroke-dasharray": "none"
+        };
+
+    usRaphael = {};
+
+    var states = [];
+
+    for (var state in usMap) {
+        var path = R.path(usMap[state]).attr(attr);
+        path.name = state;
+        usRaphael[state] = path;
+        states.push(path);
+    };
+    // END RAPHAEL CODE
+    usMapView = function () {
+        this.defaultColor = "#d3d3d3";
+        this.highlightColor = "#777777";
+        this.sectionHighlightColor = "#bbbbbb";
+        this.specialHighlightColor = "#CC0033";
+
+        this.reset = function () {
+            for (var state in usRaphael) {
+                usRaphael[state].animate({
+                    fill: mapView.defaultColor
+                }, 100);
+            }
+            R.safari();
+        };
+
+        this.chooseState = function (state) {
+            this.highlightState(state, false, this.specialHighlightColor);
+        };
+
+        this.highlight = function (state, section, special) {
+            if (special === true) {
+                var color = this.specialHighlightColor
+            } else {
+                var color = this.highlightColor
+            }
+            this.highlightSection(section);
+            this.highlightState(state, false, color);
+        };
+
+        this.highlightSection = function (section) {
+            section.map(this.highlightState);
+        };
+
+        this.highlightState = function (state, position, color) {
+            if (typeof position === "number") {
+                var color = mapView.sectionHighlightColor;
+            }
+            usRaphael[state].animate({
+                fill: color
+            }, 100);
+        };
+    };
+
+    drillDownFormView = function () {
+        this.highlightState = function (state) {
+            $('select[name="states"] option[value="' + state.toUpperCase() + '"]').attr("selected", "selected");
+        };
+
+        this.reset = function () {
+            $('select[name="states"] option[value="none"]').attr("selected", "selected");
+        };
+
+        $('select[name="states"] option').mouseenter(function (e) {
+            front.highlight($(e.target).attr("value").toLowerCase());
+        })
+        $('select[name="states"] option').mouseout(function (e) {
+            front.reset(false);
+        })
+    };
+
+    appController = function () {
+        this.highlight = function (state) {
+            if (state !== "mi") {
+                var special = false
+            } else {
+                var special = true;
+            };
+            formView.highlightState(state);
+            mapView.highlight(state, officersCollection.stateLookup[state].states, special);
+        };
+
+        this.choose = function (state) {
+            mapView.chooseState(state);
+            if (state !== "mi") {
+                new modal(officersCollection.stateLookup[state].id);
+            } else {
+                michiganModal();
+            };
+        }
+
+        this.reset = function (formReset) {
+            if (formReset) {
+                formView.reset();
+            }
+            mapView.reset();
+        };
+    };
+
+    var setup = function (stte) {
+            stte.color = Raphael.getColor();
+            stte[0].style.cursor = "pointer";
+            stte[0].onmousedown = function () {
+                front.choose(this.raphael.name);
+            };
+            stte[0].onmouseover = function () {
+                if (window.current != this.raphael.name && window.mapHover) {
+                    window.current = this.raphael.name;
+                    front.highlight(current);
+                }
+            };
+            stte[0].onmouseout = function () {
+                window.current = null;
+                front.reset(true);
+            };
+            return stte;
+        }
+
+    officerModel = function (fullname, title, email, states, counties, territories, qna) {
+        this.id = fullname.replace(" ", "_");
+
+        this.title = title;
+
+        this.email = email;
+
+        this.states = states;
+
+        this.counties = counties;
+
+        this.territory = territories;
+
+        this.qna = qna;
+    }
+
+    stateModel = function (id, name, counties) {
+        this.id = id;
+
+        this.name = name;
+
+        this.counties = counties;
+
+        this.reference = undefined;
+    }
+
+    collection = function (model) {
+        this.model = model;
+        this.add = function (obj) {
+            this.data.push(new this.model(obj));
+        };
+        this.data = [];
+    }
+
+    officersCollection = new collection(officerModel);
+
+    officersCollection.lookup = {};
+    officersCollection.stateLookup = {};
+    officersCollection.countyLookup = {};
+
+    officersCollection.template = Handlebars.compile($("#officer-template").html());
+
+    officersCollection.add = function (fullname, title, email, states, counties, territories, qna) {
+        var pointer = officersCollection.data.push(new officersCollection.model(fullname, title, email, states, counties, territories, qna));
+        officersCollection.data[pointer - 1].reference = officersCollection.data[pointer - 1];
+        officersCollection.lookup[officersCollection.data[pointer - 1].id] = officersCollection.data[pointer - 1];
+        for (var s in states) {
+            officersCollection.stateLookup[states[s]] = officersCollection.data[pointer - 1];
+        }
+        for (var c in counties) {
+            officersCollection.countyLookup[counties[c]] = officersCollection.data[pointer - 1];
+        }
+
+        $('div#modals').append(officersCollection.template(officersCollection.data[pointer - 1]));
+    }
+
+    stateCollection = new collection(stateModel);
+
+    stateCollection.lookup = {};
+
+    stateCollection.add = function (id, name, counties) {
+        var pointer = stateCollection.data.push(new stateCollection.model(id, name, counties));
+        stateCollection.data[pointer - 1].reference = stateCollection.data[pointer - 1];
+        stateCollection.lookup[stateCollection.data[pointer - 1].id] = stateCollection.data[pointer - 1];
+    }
+
+    for (var s in stateList.states) {
+        stateCollection.add(stateList.states[s].abbr, stateList.states[s].title)
+    }
+
+    for (var o in officerCollection) {
+        officersCollection.add(officerCollection[o].fullname, officerCollection[o].title, officerCollection[o].email, officerCollection[o].states, officerCollection[o].counties, officerCollection[o].territory, officerCollection[o].qna)
+    }
 
     window.mapHover = true;
     window.mapView = new usMapView();
     window.formView = new drillDownFormView();
     window.front = new appController();
-    
-    states.map( setup );
-    
-    new modal("title");
-  }
 
-$(document).ready(function() {
+    states.map(setup);
 
-})
+}
 </script>
