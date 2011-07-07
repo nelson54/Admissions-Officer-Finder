@@ -910,10 +910,10 @@ window.onload = function () {
         		var stateListStr = "";
         	}
         	if (states.length === 1){
-        		var stateListStr = ", and the state of " + this.getStateName(states[0]);
+        		var stateListStr = " and the state of " + this.getStateName(states[0]);
         	}
         	if (states.length > 1){
-        		var stateListStr = ", and the states " + states.map(this.getStateName).join(", ");
+        		var stateListStr = " and the states " + states.map(this.getStateName).join(", ");
         	}
         	
         	return (countyListStr + stateListStr);
