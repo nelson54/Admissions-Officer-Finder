@@ -226,6 +226,7 @@ form#drillDown select {width:150px; padding:2px 2px;}
 
 .office-questions-nav {
 	float:right;
+	width:50px;
 }
 
 div#no-menu-content {
@@ -412,7 +413,7 @@ if (!Array.prototype.map) {
     };
 }
 
-var stateList={states:[{abbr:"AK",title:"Alaska"},{abbr:"AL",title:"Alabama"},{abbr:"AR",title:"Arkansas"},{abbr:"AS",title:"American Samoa"},{abbr:"AZ",title:"Arizona"},{abbr:"CA",title:"California"},{abbr:"CO",title:"Colorado"},{abbr:"CT",title:"Connecticut"},{abbr:"DC",title:"D.C."},{abbr:"DE",title:"Delaware"},{abbr:"FL",title:"Florida"},{abbr:"FM",title:"Micronesia"},{abbr:"GA",title:"Georgia"},{abbr:"GU",title:"Guam"},{abbr:"HI",title:"Hawaii"},{abbr:"IA",title:"Iowa"},{abbr:"ID",title:"Idaho"},{abbr:"IL",title:"Illinois"},{abbr:"IN",title:"Indiana"},{abbr:"KS",title:"Kansas"},{abbr:"KY",title:"Kentucky"},{abbr:"LA",title:"Louisiana"},{abbr:"MA",title:"Massachusetts"},{abbr:"MD",title:"Maryland"},{abbr:"ME",title:"Maine"},{abbr:"MH",title:"Marshall Islands"},{abbr:"MI",title:"Michigan",counties:["Alcona","Alger","Allegan","Alpena","Antrim","Arenac","Baraga","Barry","Bay","Benzie","Berrien","Branch","Calhoun","Cass","Charlevoix","Cheboygan","Chippewa","Clare","Clinton","Crawford","Delta","Dickinson","Eaton","Emmet","Genesee","Gladwin","Gogebic","Grand Traverse","Gratiot","Hillsdale","Houghton","Huron","Ingham","Ionia","Iosco","Iron","Isabella","Jackson","Kalamazoo","Kalkaska","Kent","Keweenaw","Lake","Lapeer","Leelanau","Lenawee","Livingston","Luce","Mackinac","Macomb","Manistee","Marquette","Mason","Mecosta","Menominee","Midland","Missaukee","Monroe","Montcalm","Montmorency","Muskegon","Newaygo","Oakland","Oceana","Ogemaw","Ontonagon","Osceola","Oscoda","Otsego","Ottawa","Presque Isle","Roscommon","Saginaw","Sanilac","Schoolcraft","Shiawassee","St. Clair","St. Joseph","Tuscola","Van Buren","Washtenaw","Wayne","Wexford"]},{abbr:"MN",title:"Minnesota"},{abbr:"MO",title:"Missouri"},{abbr:"MP",title:"Marianas"},{abbr:"MS",title:"Mississippi"},{abbr:"MT",title:"Montana"},{abbr:"NC",title:"North Carolina"},{abbr:"ND",title:"North Dakota"},{abbr:"NE",title:"Nebraska"},{abbr:"NH",title:"New Hampshire"},{abbr:"NJ",title:"New Jersey"},{abbr:"NM",title:"New Mexico"},{abbr:"NV",title:"Nevada"},{abbr:"NY",title:"New York"},{abbr:"OH",title:"Ohio"},{abbr:"OK",title:"Oklahoma"},{abbr:"OR",title:"Oregon"},{abbr:"PA",title:"Pennsylvania"},{abbr:"PR",title:"Puerto Rico"},{abbr:"PW",title:"Palau"},{abbr:"RI",title:"Rhode Island"},{abbr:"SC",title:"South Carolina"},{abbr:"SD",title:"South Dakota"},{abbr:"TN",title:"Tennessee"},{abbr:"TX",title:"Texas"},{abbr:"UT",title:"Utah"},{abbr:"VA",title:"Virginia"},{abbr:"VI",title:"Virgin Islands"},{abbr:"VT",title:"Vermont"},{abbr:"WA",title:"Washington"},{abbr:"WI",title:"Wisconsin"},{abbr:"WV",title:"West Virginia"},{abbr:"WY",title:"Wyoming"}]};
+var stateList={states:[{abbr:"AK",title:"Alaska"},{abbr:"AL",title:"Alabama"},{abbr:"AR",title:"Arkansas"},{abbr:"AS",title:"American Samoa"},{abbr:"AZ",title:"Arizona"},{abbr:"CA",title:"California"},{abbr:"CO",title:"Colorado"},{abbr:"CT",title:"Connecticut"},{abbr:"DC",title:"D.C."},{abbr:"DE",title:"Delaware"},{abbr:"FL",title:"Florida"},{abbr:"FM",title:"Micronesia"},{abbr:"GA",title:"Georgia"},{abbr:"GU",title:"Guam"},{abbr:"HI",title:"Hawaii"},{abbr:"IA",title:"Iowa"},{abbr:"ID",title:"Idaho"},{abbr:"IL",title:"Illinois"},{abbr:"IND",title:"Indiana"},{abbr:"KS",title:"Kansas"},{abbr:"KY",title:"Kentucky"},{abbr:"LA",title:"Louisiana"},{abbr:"MA",title:"Massachusetts"},{abbr:"MD",title:"Maryland"},{abbr:"ME",title:"Maine"},{abbr:"MH",title:"Marshall Islands"},{abbr:"MI",title:"Michigan",counties:["Alcona","Alger","Allegan","Alpena","Antrim","Arenac","Baraga","Barry","Bay","Benzie","Berrien","Branch","Calhoun","Cass","Charlevoix","Cheboygan","Chippewa","Clare","Clinton","Crawford","Delta","Dickinson","Eaton","Emmet","Genesee","Gladwin","Gogebic","Grand Traverse","Gratiot","Hillsdale","Houghton","Huron","Ingham","Ionia","Iosco","Iron","Isabella","Jackson","Kalamazoo","Kalkaska","Kent","Keweenaw","Lake","Lapeer","Leelanau","Lenawee","Livingston","Luce","Mackinac","Macomb","Manistee","Marquette","Mason","Mecosta","Menominee","Midland","Missaukee","Monroe","Montcalm","Montmorency","Muskegon","Newaygo","Oakland","Oceana","Ogemaw","Ontonagon","Osceola","Oscoda","Otsego","Ottawa","Presque Isle","Roscommon","Saginaw","Sanilac","Schoolcraft","Shiawassee","St. Clair","St. Joseph","Tuscola","Van Buren","Washtenaw","Wayne","Wexford"]},{abbr:"MN",title:"Minnesota"},{abbr:"MO",title:"Missouri"},{abbr:"MP",title:"Marianas"},{abbr:"MS",title:"Mississippi"},{abbr:"MT",title:"Montana"},{abbr:"NC",title:"North Carolina"},{abbr:"ND",title:"North Dakota"},{abbr:"NE",title:"Nebraska"},{abbr:"NH",title:"New Hampshire"},{abbr:"NJ",title:"New Jersey"},{abbr:"NM",title:"New Mexico"},{abbr:"NV",title:"Nevada"},{abbr:"NY",title:"New York"},{abbr:"OH",title:"Ohio"},{abbr:"OK",title:"Oklahoma"},{abbr:"OR",title:"Oregon"},{abbr:"PA",title:"Pennsylvania"},{abbr:"PR",title:"Puerto Rico"},{abbr:"PW",title:"Palau"},{abbr:"RI",title:"Rhode Island"},{abbr:"SC",title:"South Carolina"},{abbr:"SD",title:"South Dakota"},{abbr:"TN",title:"Tennessee"},{abbr:"TX",title:"Texas"},{abbr:"UT",title:"Utah"},{abbr:"VA",title:"Virginia"},{abbr:"VI",title:"Virgin Islands"},{abbr:"VT",title:"Vermont"},{abbr:"WA",title:"Washington"},{abbr:"WI",title:"Wisconsin"},{abbr:"WV",title:"West Virginia"},{abbr:"WY",title:"Wyoming"}]};
 
 var officerCollection = {
     1: {
@@ -447,7 +448,7 @@ var officerCollection = {
         title: "Recruiter / Financial Aid Officer",
         email: "hansenk8@ferris.edu",
         states: [ "ind", "wi", "il" ],
-        counties: ["Allegan", "St. Joseph", "Kalamazoo", "Berrien", "Cass", "Van Buren", "Calhoun", "Branch"],
+        counties: ["Allegan", "St. Joseph", "Kalamazoo", "Berrien", "Cass", "Van Buren", "Calhoun", "Branch", "Barry"],
         territory: "Allegan, St. Joseph, Kalamazoo, Berrien, Cass, Van Buren & the state of Illinois",
         bio: "Hello, my name is Krista Hansen originally from Battle Creek, I am now happy to live in St. Joseph near Lake Michigan's beautiful beaches. I earned my Bachelor of Music Education degree in 2003 and spent four years teaching instrumental music in the public schools.<br />Please don't hesitate to contact me with any questions regarding the admission or financial aid processes. If you\'d like to set up a meeting with me, my office is conveniently located at our branch campus in Dowagiac on the campus of Southwestern Michigan College.",
         qna: [{
@@ -890,6 +891,34 @@ window.onload = function () {
         }
 
     officerModel = function (fullname, title, email, states, counties, territories, qna) {
+    	
+    	this.getStateName = function(state){
+    		return stateCollection.lookup[state.toUpperCase()].name;
+    	}
+    	
+    	this.getTerritories = function(counties, states){
+        	if ( counties.length === 0 ){
+        		var countyListStr = "";
+        	}
+        	if ( counties.length > 0 ){
+        		var countyListStr = counties.join(", ");
+        	}
+        	if ( counties.length === 1 ){
+        		var countyListStr = counties[0];
+        	}
+        	if (states.length === 0){
+        		var stateListStr = "";
+        	}
+        	if (states.length === 1){
+        		var stateListStr = "and the state " + this.getStateName(states[0]);
+        	}
+        	if (states.length > 1){
+        		var stateListStr = " and the states " + states.map(this.getStateName).join(", ");
+        	}
+        	
+        	return (countyListStr + stateListStr);
+        };
+    	
         this.id = fullname.replace(/ /g, "_");
         
         this.fullname = fullname;
@@ -902,7 +931,7 @@ window.onload = function () {
 
         this.counties = counties;
 
-        this.territory = territories;
+        this.territory = this.getTerritories(counties, states);
 
         this.qna = qna;
     }
