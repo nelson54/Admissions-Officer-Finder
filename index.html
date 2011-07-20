@@ -274,8 +274,10 @@ div#no-menu-content {
 
 <link type="text/css" rel="stylesheet" media="print" href="http://wwwdev.ferris.edu/admissions/css/current/print.css" />
 
-<title>Campus Visit - Administration - Ferris State University</title>
-
+<title>Admissions Officers - Ferris State University</title>
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 </head> <body>
 
 <div id="container">
@@ -283,7 +285,7 @@ div#no-menu-content {
     	<div id="logo"><a href="http://www.ferris.edu">
         	<img src="https://wwws.ferris.edu/admissions/images/ferrisstatelogo.png" />
             </a>
-            <h1><a href="http://www.ferris.edu/admissions/admin/public/visits/daily/Evnt_Calendar.cfm">Campus Visits</a></h1>
+            <h1><a href="http://www.ferris.edu/">Admissions Officers</a></h1>
 
         </div>
 <div class="nav suckertreemenu">
@@ -300,7 +302,7 @@ div#no-menu-content {
 				<div class="modal ui-helper-hidden" id="title">
                     <a href="#close" class="close"></a>
                     <div>
-					<h1> Select your state and country*<br /> to find an admissions counselor<br /> that represents your area.</h1>
+					<h1> Select your state and county*<br /> to find an admissions counselor<br /> that represents your area.</h1>
 					<p>*Applicable only to Michigan residents.</p>
 					<p>Please note that these territories are non-exclusive. Any member of ourstaff is qualified and willing to assist you.</p>
                     </div>
@@ -392,6 +394,7 @@ div#no-menu-content {
 <script type="text/javascript" src="handlebars.js"></script>
 <script type="text/javascript" src="raphael-min.js"></script>
 <script type="text/javascript" src="us-map-svg.js"></script>
+<script type="text/javascript" src="app.js"></script>
 <script type="text/javascript">
 if (!Array.prototype.map) {
     Array.prototype.map = function (fun /*, thisp */ ) {
@@ -422,7 +425,7 @@ var officerCollection = {
         firstname: "Paul",
         image: "images/PaulKwant.jpg",
         title: "SENIOR RECRUITING OFFICER",
-        email: "person1@host.com",
+        email: "kwantp@ferris.edu",
         states: [ "me", "nh", "vt", "ma", "ct", "md", "pa", "ri", "ny", "nj", "de" ],
         counties: ["Arenac", "Isabella", "Midland", "Bay", "Huron", "Gratiot", "Saginaw", "Tuscola", "Sanilac", "Clinton", "Shiawassee","Genesee", "Lapeer", "St. Clair"],
         territory: "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
@@ -571,7 +574,7 @@ var officerCollection = {
       	fullname : "Chris Higley",
 		firstname : "Chris",
 		title : "Admissions Officer",
-  		email : "carv9@ferris.edu",
+  		email : "christine_higley@ferris.edu",
   		states : [ "nd", "sd", "ne", "ks", "ok", "tx", "mn", "ia", "ar", "la" ],
   		counties : [ "Montcalm", "Ionia", "Eaton", "Ingham", "Jackson", "Hillsdale", "Lenawee" ],
 		territorys : "Barry, Eaton, Ingham, Calhoun, Jackson, Washtenaw, Branch, Hillsdale, Lenawee, Ionia, Clinton, Shiawassee & the state of Lowa",
@@ -659,109 +662,21 @@ var officerCollection = {
 			]
 	}
 }
-window.modal = function (id) {
-    this.selector = function (id) {
-        return $("#" + id);
+
+var R = Raphael("admissions_map", 1000, 600),
+    attr = {
+        "fill": "#d3d3d3",
+        "stroke": "#fff",
+        "stroke-opacity": "1",
+        "stroke-linejoin": "round",
+        "stroke-miterlimit": "4",
+        "stroke-width": "0.75",
+        "stroke-dasharray": "none"
     };
-
-    this.clickHandler = function (id, func) {
-        $("a.close").click(function () {
-            func(id)
-        });
-    };
-
-    this.show = function (id) {
-        this.selector(id).show();
-        front.stopReset(true);
-        location.hash = id;
-        window.mapHover = false;
-        $(".modal-background").show();
-        
-        $('.office-head-bottom').cycle({
-            fx: 'fade',
-            next: '.next',
-            prev: '.prev'
-        });
-    };
-
-    this.hide = function ( id ) {
-
-        front.stopReset(false);
-		window.formReset = true;
-        window.mapHover = true;
-        front.reset();
-        
-        $(".modal-background").hide();
-        id.hide();
-        location.hash = "";
-    };
-
-    this.show(id);
-    this.clickHandler(this.selector(id), this.hide);
-};
-
-function initStateAbbrLookUp() {
-    var StateAbbrLookUp = {};
-    for (state in stateList.states) {
-        StateAbbrLookUp[stateList.states[state].abbr] = stateList.states[state];
-    }(StateAbbrLookUp, stateList)
-    return (StateAbbrLookUp);
-}
-
-function michiganModal() {
-    var drillDownSource = $("#modal-form-template").html();
-    var drillDownTemplate = Handlebars.compile(drillDownSource);
-    var drillDownContext = {};
-
-    drillDownContext['county'] = stateAbbrLookUp["MI"]["counties"];
-    var drillDownHtml = drillDownTemplate(drillDownContext);
-
-    $("#modals").prepend(drillDownHtml);
-
-    new modal("modal-form");
-
-    $("form#modal-form-county-search select[name='counties']").change(function () {
-        new modal(officersCollection.countyLookup[$("form#modal-form-county-search select[name='counties']").val()].id);
-        return false;
-    })
-    return false;
-}
-
-function renderDrillDownForm(state) {
-    var drillDownSource = $("#drilldown-form-template").html();
-    var drillDownTemplate = Handlebars.compile(drillDownSource);
-    var drillDownContext = stateList;
-	var drillDownHtml = drillDownTemplate(drillDownContext);
-    $("#drilldowndiv").remove();
-    $("#no-menu-content").prepend(drillDownHtml);
-
-    if (state) {
-        $("form#drillDown select[name='states'] option[value='" + state + "']").attr("selected", "selected");
-    }
-
-    $("form#drillDown select[name='states']").change(function () {
-        var state = $("form#drillDown select[name='states']").val().toLowerCase();
-        renderDrillDownForm(state);
-        front.choose(state);
-    });
-}
-
-stateAbbrLookUp = initStateAbbrLookUp();
 
 window.onload = function () {
 
     // START RAPHAEL CODE
-    var R = Raphael("admissions_map", 1000, 600),
-        attr = {
-            "fill": "#d3d3d3",
-            "stroke": "#fff",
-            "stroke-opacity": "1",
-            "stroke-linejoin": "round",
-            "stroke-miterlimit": "4",
-            "stroke-width": "0.75",
-            "stroke-dasharray": "none"
-        };
-
     usRaphael = {};
 
     var states = [];
@@ -773,103 +688,6 @@ window.onload = function () {
         states.push(path);
     };
     // END RAPHAEL CODE
-    usMapView = function () {
-        this.defaultColor = "#d3d3d3";
-        this.highlightColor = "#777777";
-        this.sectionHighlightColor = "#bbbbbb";
-        this.specialHighlightColor = "#CC0033";
-
-        this.reset = function () {
-            for (var state in usRaphael) {
-                usRaphael[state].animate({
-                    fill: mapView.defaultColor
-                }, 100);
-            }
-            R.safari();
-        };
-
-        this.chooseState = function (state) {
-            this.highlightState(state, false, this.specialHighlightColor);
-        };
-
-        this.highlight = function (state, section, special) {
-            if (special === true) {
-                var color = this.specialHighlightColor
-            } else {
-                var color = this.highlightColor
-            }
-            this.highlightSection(section);
-            this.highlightState(state, false, color);
-        };
-
-        this.highlightSection = function (section) {
-            section.map(this.highlightState);
-        };
-
-        this.highlightState = function (state, position, color) {
-            if (typeof position === "number") {
-                var color = mapView.sectionHighlightColor;
-            }
-            usRaphael[state].animate({
-                fill: color
-            }, 100);
-        };
-    };
-
-    drillDownFormView = function () {
-        this.highlightState = function (state) {
-            $('select[name="states"] option[value="' + state.toUpperCase() + '"]').attr("selected", "selected");
-        };
-
-        this.reset = function () {
-            $('select[name="states"] option[value="none"]').attr("selected", "selected");
-        };
-
-        $('select[name="states"] option').mouseenter(function (e) {
-            front.highlight($(e.target).attr("value").toLowerCase());
-        })
-        $('select[name="states"] option').mouseout(function (e) {
-            front.reset(false);
-        })
-    };
-
-    appController = function () {
-    	
-        this.highlight = function (state) {
-            if (state !== "mi") {
-                var special = false
-                var states = officersCollection.stateLookup[state].states;
-            } else {
-                var special = true;
-                var states = [];
-            };
-            
-            
-            
-            formView.highlightState(state);
-            mapView.highlight(state, states, special);
-        };
-
-        this.choose = function (state) {
-            mapView.chooseState(state);
-            if (state !== "mi") {
-                new modal(officersCollection.stateLookup[state].id);
-            } else {
-                michiganModal();
-            };
-        };
-
-        this.reset = function (formReset) {
-        	if (!stopReset){
-                formView.reset();
-                mapView.reset();
-           }
-        };
-        
-        this.stopReset = function (bool){
-        	window.stopReset = bool;
-        }
-    };
 
     var setup = function (stte) {
             stte.color = Raphael.getColor();
@@ -890,115 +708,19 @@ window.onload = function () {
             return stte;
         }
 
-    officerModel = function (fullname, title, email, states, counties, territories, qna) {
-    	
-    	this.getStateName = function(state){
-    		return stateCollection.lookup[state.toUpperCase()].name;
-    	}
-    	
-    	this.getTerritories = function(counties, states){
-        	if ( counties.length === 0 ){
-        		var countyListStr = "";
-        	}
-        	if ( counties.length > 0 ){
-        		var countyListStr = counties.join(", ");
-        	}
-        	if ( counties.length === 1 ){
-        		var countyListStr = counties[0];
-        	}
-        	if (states.length === 0){
-        		var stateListStr = "";
-        	}
-        	if (states.length === 1){
-        		var stateListStr = " and the state of " + this.getStateName(states[0]);
-        	}
-        	if (states.length > 1){
-        		var stateListStr = " and the states " + states.map(this.getStateName).join(", ");
-        	}
-        	
-        	return (countyListStr + stateListStr);
-        };
-    	
-        this.id = fullname.replace(/ /g, "_");
-        
-        this.fullname = fullname;
-        
-        this.title = title;
-
-        this.email = email;
-
-        this.states = states;
-
-        this.counties = counties;
-
-        this.territory = this.getTerritories(counties, states);
-
-        this.qna = qna;
-    }
-
-    stateModel = function (id, name, counties) {
-        this.id = id;
-
-        this.name = name;
-
-        this.counties = counties;
-
-        this.reference = undefined;
-    }
-
-    collection = function (model) {
-        this.model = model;
-        this.add = function (obj) {
-            this.data.push(new this.model(obj));
-        };
-        this.data = [];
-    }
-
-    officersCollection = new collection(officerModel);
-
-    officersCollection.lookup = {};
-    officersCollection.stateLookup = {};
-    officersCollection.countyLookup = {};
-
-    officersCollection.template = Handlebars.compile($("#officer-template").html());
-
-    officersCollection.add = function (fullname, title, email, states, counties, territories, qna) {
-        var pointer = officersCollection.data.push(new officersCollection.model(fullname, title, email, states, counties, territories, qna));
-        officersCollection.data[pointer - 1].reference = officersCollection.data[pointer - 1];
-        officersCollection.lookup[officersCollection.data[pointer - 1].id] = officersCollection.data[pointer - 1];
-        for (var s in states) {
-            officersCollection.stateLookup[states[s]] = officersCollection.data[pointer - 1];
-        }
-        for (var c in counties) {
-            officersCollection.countyLookup[counties[c]] = officersCollection.data[pointer - 1];
-        }
-
-        $('div#modals').append(officersCollection.template(officersCollection.data[pointer - 1]));
-    }
-
-    stateCollection = new collection(stateModel);
-
-    stateCollection.lookup = {};
-
-    stateCollection.add = function (id, name, counties) {
-        var pointer = stateCollection.data.push(new stateCollection.model(id, name, counties));
-        stateCollection.data[pointer - 1].reference = stateCollection.data[pointer - 1];
-        stateCollection.lookup[stateCollection.data[pointer - 1].id] = stateCollection.data[pointer - 1];
-    }
-
-    for (var s in stateList.states) {
-        stateCollection.add(stateList.states[s].abbr, stateList.states[s].title)
+    for (var i in stateList.states) {
+        stateCollection.add(stateList.states[i].abbr, stateList.states[i].title, stateList.states[i].counties)
     }
 
     for (var o in officerCollection) {
-        officersCollection.add(officerCollection[o].fullname, officerCollection[o].title, officerCollection[o].email, officerCollection[o].states, officerCollection[o].counties, officerCollection[o].territory, officerCollection[o].qna)
+        officersCollection.add(officerCollection[o].fullname, officerCollection[o].title, officerCollection[o].email, officerCollection[o].states, officerCollection[o].counties, officerCollection[o].territory, officerCollection[o].qna, function(state){return stateCollection.getStateName(state)} )
     }
 
     window.mapHover = true;
     window.stopReset = false;
     window.mapView = new usMapView();
     window.formView = new drillDownFormView();
-    window.front = new appController();
+    window.front = new appController(mapView);
 
     states.map(setup);
     new modal("title");
