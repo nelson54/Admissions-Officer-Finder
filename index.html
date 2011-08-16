@@ -23,7 +23,25 @@
 
 
 <style type="text/css">
-  	
+  
+#admissions_map {
+	margin:0 auto;
+	width:auto;
+}
+
+#mi-back-button {
+    background-color: transparent;
+    border-width: 0;
+    color: #FFFFFF;
+    float: right;
+    height: 26px;
+    margin-right: 20px;
+    right: 52px;
+    text-align: right;
+    top: 5px;
+    width: 75px;
+}
+
 div#dialog {
   		display:block;
   		width:300px;
@@ -45,8 +63,8 @@ select option {
     top: 0;
     width: 100%;
     height:100%;
-    z-index: 999;
-    background: none repeat scroll 0 0 rgba(256, 256, 256, 0.7);
+    z-index: 999;    
+	background-image: url("images/white_opacity70.png");
 }
 
 .modal {
@@ -251,19 +269,11 @@ div#no-menu-content {
 
 </style>
 
-<!--[[if lte IE 8]]>
+<!--[[if lt IE 9]]>
 <style type="text/css">
 	.modal-background {
-		background-image: url("./images/white_opacity70.png");
-	    filter: progid:DXImageTransform.Microsoft.gradient(
-	      gradientType=1, startColorStr=#ccFFFFFF, endColorStr=#ccFFFFFF
-	    );
-	
-	    /* IE8 uses -ms-filter for whatever reason... */
-	    -ms-filter: progid:DXImageTransform.Microsoft.gradient(
-	      gradientType=1, startColorStr=#FFFFFF00, endColorStr=#FFFFFF00
-	    );
-	}
+		background-image: url("images/white_opacity70.png")
+	};
 </style>	
 <![endif]-->
 
@@ -284,14 +294,13 @@ div#no-menu-content {
 
         </div>
 <div class="nav suckertreemenu">
-    <ul id="treemenu1">
-
-    </ul>
+	
 </div>
 	</div>
     <div id="content_area">
         <div id="no-menu-content" > 
-			<div id="admissions_map"></div>
+			<div id="united_states" class="map"></div>
+			<div id="michigan" class="map"></div>
 			<div class="modal-background ui-helper-hidden"></div>
 			<div id="modals">
 				<div class="modal ui-helper-hidden" id="title">
@@ -329,7 +338,7 @@ div#no-menu-content {
 
 	    <select name="states">
 	    	<option value="none">&nbsp;</option>
-	    	{{#each states}}
+	    	{{#each options}}
 			<option value="{{this.abbr}}">{{this/title}}</option>
 			{{/each}}
 	    </select>
@@ -352,6 +361,10 @@ div#no-menu-content {
 		    </form>
         </div>
     </div>
+</script>
+
+<script id="mi-back-button" type="text/x-handlebars-template">
+	<button id="mi-back-button" onclick="window.front.setMap(window.mapView);">Back</button>
 </script>
 
 <script id="officer-template" type="text/x-handlebars-template">
@@ -387,8 +400,9 @@ div#no-menu-content {
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery.cycle.all.min.js"></script>
 <script type="text/javascript" src="js/handlebars.js"></script>
-<script type="text/javascript" src="js/raphael-min.js"></script>
+<script type="text/javascript" src="js/raphael.js"></script>
 <script type="text/javascript" src="js/us-map-svg.js"></script>
+<script type="text/javascript" src="js/mi-map-svg.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
 if (!Array.prototype.map) {
@@ -411,7 +425,7 @@ if (!Array.prototype.map) {
     };
 }
 
-var stateList={states:[{abbr:"AK",title:"Alaska"},{abbr:"AL",title:"Alabama"},{abbr:"AR",title:"Arkansas"},{abbr:"AS",title:"American Samoa"},{abbr:"AZ",title:"Arizona"},{abbr:"CA",title:"California"},{abbr:"CO",title:"Colorado"},{abbr:"CT",title:"Connecticut"},{abbr:"DC",title:"D.C."},{abbr:"DE",title:"Delaware"},{abbr:"FL",title:"Florida"},{abbr:"FM",title:"Micronesia"},{abbr:"GA",title:"Georgia"},{abbr:"GU",title:"Guam"},{abbr:"HI",title:"Hawaii"},{abbr:"IA",title:"Iowa"},{abbr:"ID",title:"Idaho"},{abbr:"IL",title:"Illinois"},{abbr:"IND",title:"Indiana"},{abbr:"KS",title:"Kansas"},{abbr:"KY",title:"Kentucky"},{abbr:"LA",title:"Louisiana"},{abbr:"MA",title:"Massachusetts"},{abbr:"MD",title:"Maryland"},{abbr:"ME",title:"Maine"},{abbr:"MH",title:"Marshall Islands"},{abbr:"MI",title:"Michigan",counties:["Alcona","Alger","Allegan","Alpena","Antrim","Arenac","Baraga","Barry","Bay","Benzie","Berrien","Branch","Calhoun","Cass","Charlevoix","Cheboygan","Chippewa","Clare","Clinton","Crawford","Delta","Dickinson","Eaton","Emmet","Genesee","Gladwin","Gogebic","Grand Traverse","Gratiot","Hillsdale","Houghton","Huron","Ingham","Ionia","Iosco","Iron","Isabella","Jackson","Kalamazoo","Kalkaska","Kent","Keweenaw","Lake","Lapeer","Leelanau","Lenawee","Livingston","Luce","Mackinac","Macomb","Manistee","Marquette","Mason","Mecosta","Menominee","Midland","Missaukee","Monroe","Montcalm","Montmorency","Muskegon","Newaygo","Oakland","Oceana","Ogemaw","Ontonagon","Osceola","Oscoda","Otsego","Ottawa","Presque Isle","Roscommon","Saginaw","Sanilac","Schoolcraft","Shiawassee","St. Clair","St. Joseph","Tuscola","Van Buren","Washtenaw","Wayne","Wexford"]},{abbr:"MN",title:"Minnesota"},{abbr:"MO",title:"Missouri"},{abbr:"MP",title:"Marianas"},{abbr:"MS",title:"Mississippi"},{abbr:"MT",title:"Montana"},{abbr:"NC",title:"North Carolina"},{abbr:"ND",title:"North Dakota"},{abbr:"NE",title:"Nebraska"},{abbr:"NH",title:"New Hampshire"},{abbr:"NJ",title:"New Jersey"},{abbr:"NM",title:"New Mexico"},{abbr:"NV",title:"Nevada"},{abbr:"NY",title:"New York"},{abbr:"OH",title:"Ohio"},{abbr:"OK",title:"Oklahoma"},{abbr:"OR",title:"Oregon"},{abbr:"PA",title:"Pennsylvania"},{abbr:"PR",title:"Puerto Rico"},{abbr:"PW",title:"Palau"},{abbr:"RI",title:"Rhode Island"},{abbr:"SC",title:"South Carolina"},{abbr:"SD",title:"South Dakota"},{abbr:"TN",title:"Tennessee"},{abbr:"TX",title:"Texas"},{abbr:"UT",title:"Utah"},{abbr:"VA",title:"Virginia"},{abbr:"VI",title:"Virgin Islands"},{abbr:"VT",title:"Vermont"},{abbr:"WA",title:"Washington"},{abbr:"WI",title:"Wisconsin"},{abbr:"WV",title:"West Virginia"},{abbr:"WY",title:"Wyoming"}]};
+var stateList={options:[{abbr:"AK",title:"Alaska"},{abbr:"AL",title:"Alabama"},{abbr:"AR",title:"Arkansas"},{abbr:"AS",title:"American Samoa"},{abbr:"AZ",title:"Arizona"},{abbr:"CA",title:"California"},{abbr:"CO",title:"Colorado"},{abbr:"CT",title:"Connecticut"},{abbr:"DC",title:"D.C."},{abbr:"DE",title:"Delaware"},{abbr:"FL",title:"Florida"},{abbr:"FM",title:"Micronesia"},{abbr:"GA",title:"Georgia"},{abbr:"GU",title:"Guam"},{abbr:"HI",title:"Hawaii"},{abbr:"IA",title:"Iowa"},{abbr:"ID",title:"Idaho"},{abbr:"IL",title:"Illinois"},{abbr:"IND",title:"Indiana"},{abbr:"KS",title:"Kansas"},{abbr:"KY",title:"Kentucky"},{abbr:"LA",title:"Louisiana"},{abbr:"MA",title:"Massachusetts"},{abbr:"MD",title:"Maryland"},{abbr:"ME",title:"Maine"},{abbr:"MH",title:"Marshall Islands"},{abbr:"MI",title:"Michigan",counties:["Alcona","Alger","Allegan","Alpena","Antrim","Arenac","Baraga","Barry","Bay","Benzie","Berrien","Branch","Calhoun","Cass","Charlevoix","Cheboygan","Chippewa","Clare","Clinton","Crawford","Delta","Dickinson","Eaton","Emmet","Genesee","Gladwin","Gogebic","Grand Traverse","Gratiot","Hillsdale","Houghton","Huron","Ingham","Ionia","Iosco","Iron","Isabella","Jackson","Kalamazoo","Kalkaska","Kent","Keweenaw","Lake","Lapeer","Leelanau","Lenawee","Livingston","Luce","Mackinac","Macomb","Manistee","Marquette","Mason","Mecosta","Menominee","Midland","Missaukee","Monroe","Montcalm","Montmorency","Muskegon","Newaygo","Oakland","Oceana","Ogemaw","Ontonagon","Osceola","Oscoda","Otsego","Ottawa","Presque Isle","Roscommon","Saginaw","Sanilac","Schoolcraft","Shiawassee","St. Clair","St. Joseph","Tuscola","Van Buren","Washtenaw","Wayne","Wexford"]},{abbr:"MN",title:"Minnesota"},{abbr:"MO",title:"Missouri"},{abbr:"MP",title:"Marianas"},{abbr:"MS",title:"Mississippi"},{abbr:"MT",title:"Montana"},{abbr:"NC",title:"North Carolina"},{abbr:"ND",title:"North Dakota"},{abbr:"NE",title:"Nebraska"},{abbr:"NH",title:"New Hampshire"},{abbr:"NJ",title:"New Jersey"},{abbr:"NM",title:"New Mexico"},{abbr:"NV",title:"Nevada"},{abbr:"NY",title:"New York"},{abbr:"OH",title:"Ohio"},{abbr:"OK",title:"Oklahoma"},{abbr:"OR",title:"Oregon"},{abbr:"PA",title:"Pennsylvania"},{abbr:"PR",title:"Puerto Rico"},{abbr:"PW",title:"Palau"},{abbr:"RI",title:"Rhode Island"},{abbr:"SC",title:"South Carolina"},{abbr:"SD",title:"South Dakota"},{abbr:"TN",title:"Tennessee"},{abbr:"TX",title:"Texas"},{abbr:"UT",title:"Utah"},{abbr:"VA",title:"Virginia"},{abbr:"VI",title:"Virgin Islands"},{abbr:"VT",title:"Vermont"},{abbr:"WA",title:"Washington"},{abbr:"WI",title:"Wisconsin"},{abbr:"WV",title:"West Virginia"},{abbr:"WY",title:"Wyoming"}]};
 
 var officerCollection = {
     1: {
@@ -422,7 +436,7 @@ var officerCollection = {
         title: "SENIOR RECRUITING OFFICER",
         email: "kwantp@ferris.edu",
         states: [ "me", "nh", "vt", "ma", "ct", "md", "pa", "ri", "ny", "nj", "de" ],
-        counties: ["Arenac", "Isabella", "Midland", "Bay", "Huron", "Gratiot", "Saginaw", "Tuscola", "Sanilac", "Clinton", "Shiawassee","Genesee", "Lapeer", "St. Clair"],
+        counties: ["Arenac", "Isabella", "Midland", "Bay", "Huron", "Gratiot", "Saginaw", "Tuscola", "Sanilac", "Clinton", "Shiawassee","Genesee", "Lapeer", "St_Clair"],
         territory: "Gladwin, Midland, Bay, Huron, Saginaw, Sanilac, Gratiot, Tuscola, Arenac, Clare, Isabella, Montcalm & the states of Kentucky, Tennessee, New Yor",
         qna: [{
             question: "Why did you pick Ferris?",
@@ -446,7 +460,7 @@ var officerCollection = {
         title: "Recruiter / Financial Aid Officer",
         email: "hansenk8@ferris.edu",
         states: [ "ind", "wi", "il" ],
-        counties: ["Allegan", "St. Joseph", "Kalamazoo", "Berrien", "Cass", "Van Buren", "Calhoun", "Branch", "Barry"],
+        counties: ["Allegan", "St_Joseph", "Kalamazoo", "Berrien", "Cass", "Van_Buren", "Calhoun", "Branch", "Barry"],
         territory: "Allegan, St. Joseph, Kalamazoo, Berrien, Cass, Van Buren & the state of Illinois",
         bio: "Hello, my name is Krista Hansen originally from Battle Creek, I am now happy to live in St. Joseph near Lake Michigan's beautiful beaches. I earned my Bachelor of Music Education degree in 2003 and spent four years teaching instrumental music in the public schools.<br />Please don't hesitate to contact me with any questions regarding the admission or financial aid processes. If you\'d like to set up a meeting with me, my office is conveniently located at our branch campus in Dowagiac on the campus of Southwestern Michigan College.",
         qna: [{
@@ -536,8 +550,8 @@ var officerCollection = {
         title: "Recruiter / Financial Aid Officer",
         email: "garreya@ferris.edu",
         states: [],
-        counties : ["Keweenaw", "Houghton", "Ontonagon", "Gogebic", "Baraga", "Iron", "Marquette", "Dickinson", "Menominee", "Alger", "Delta", "Schoolcraft", "Luce", "Mackinaw", "Chippewa", "Emmet", "Cheboygan", "Presque Isle", "Charlevoix", "Leelanau", "Antrim", "Otsego", "Montmorency", "Alpena", "Benzie", "Grand Traverse", "Kalkaska", "Crawford", "Oscoda", "Alcona", "Manistee", "Wexford", "Missaukee", "Roscommon", "Ogemaw", "Iosco", "Mason", "Lake", "Osceola", "Clare", "Gladwin", ],
-        territory: "Alcona, Alger, Alpena, Baraga, Cheboygan, Chippewa, Crawford, Delta, Dickinson, Gogebic, Houghton, Iosco, Iron, Keweenaw, Luce, Mackinac, Marquette, Menominee, Montmorency, Ogemaw, Ontonagon, Oscoda, Otsego, Presque Isle, Roscommon, Schoolcraft, Antrim, Benzie, Charlevoix, Emmet, Grand Traverse, Kalkaska, Leelanau, Manistee, Missaukee, Wexford & the state of Pennsylvania",
+        counties : ["Keweenaw", "Houghton", "Ontonagon", "Gogebic", "Baraga", "Iron", "Marquette", "Dickinson", "Menominee", "Alger", "Delta", "Schoolcraft", "Luce", "Mackinac", "Chippewa", "Emmet", "Cheboygan", "Presque_Isle", "Charlevoix", "Leelanau", "Antrim", "Otsego", "Montmorency", "Alpena", "Benzie", "Grand_Traverse", "Kalkaska", "Crawford", "Oscoda", "Alcona", "Manistee", "Wexford", "Missaukee", "Roscommon", "Ogemaw", "Iosco", "Mason", "Lake", "Osceola", "Clare", "Gladwin", ],
+        territory: "Alcona, Alger, Alpena, Baraga, Cheboygan, Chippewa, Crawford, Delta, Dickinson, Gogebic, Houghton, Iosco, Iron, Keweenaw, Luce, Mackinac, Marquette, Menominee, Montmorency, Ogemaw, Ontonagon, Oscoda, Otsego, Presque_Isle, Roscommon, Schoolcraft, Antrim, Benzie, Charlevoix, Emmet, Grand Traverse, Kalkaska, Leelanau, Manistee, Missaukee, Wexford & the state of Pennsylvania",
         qna: [{
             question: "Why Did You Pick Ferris?",
             answer: "I picked Ferris for a numerous reasons, but the number one reason it is fit me! The mid size campus, the faculty and the community of Ferris made me feel at like I was coming home."
@@ -656,69 +670,31 @@ var officerCollection = {
 			answer : "I've worked at a college or university for the last seven years, so I know that choosing the right college and major is very important. Working in higher education is very rewarding and it's great to see how a college education can open doors for graduates."}
 			]
 	}
-}
-
-var R = Raphael("admissions_map", 1000, 600),
-    attr = {
-        "fill": "#d3d3d3",
-        "stroke": "#fff",
-        "stroke-opacity": "1",
-        "stroke-linejoin": "round",
-        "stroke-miterlimit": "4",
-        "stroke-width": "0.75",
-        "stroke-dasharray": "none"
-    };
+};
 
 window.onload = function () {
+    window.miRaphael = {};
+    window.usRaphael = {};
 
-    // START RAPHAEL CODE
-    usRaphael = {};
+	window.states = [];
+	window.counties = [];
 
-    var states = [];
+    window.mapHover = true;
+    window.stopReset = false;
+    window.mapView = new UsMapView();
+    window.miMapView = new MiMapView();
+    window.front = new appController(mapView);
 
-    for (var state in usMap) {
-        var path = R.path(usMap[state]).attr(attr);
-        path.name = state;
-        usRaphael[state] = path;
-        states.push(path);
-    };
-    // END RAPHAEL CODE
-
-    var setup = function (stte) {
-            stte.color = Raphael.getColor();
-            stte[0].style.cursor = "pointer";
-            stte[0].onmousedown = function () {
-                front.choose(this.raphael.name);
-            };
-            stte[0].onmouseover = function () {
-                if (window.current != this.raphael.name && window.mapHover) {
-                    window.current = this.raphael.name;
-                    front.highlight(current);
-                }
-            };
-            stte[0].onmouseout = function () {
-                window.current = null;
-                front.reset(true);
-            };
-            return stte;
-        }
-
-    for (var i in stateList.states) {
-        stateCollection.add(stateList.states[i].abbr, stateList.states[i].title, stateList.states[i].counties)
+    for (var i in stateList.options) {
+        stateCollection.add(stateList.options[i].abbr, stateList.options[i].title, stateList.options[i].counties)
     }
 
     for (var o in officerCollection) {
         officersCollection.add(officerCollection[o].fullname, officerCollection[o].title, officerCollection[o].email, officerCollection[o].states, officerCollection[o].counties, officerCollection[o].territory, officerCollection[o].qna, function(state){return stateCollection.getStateName(state)} )
     }
 
-    window.mapHover = true;
-    window.stopReset = false;
-    window.mapView = new usMapView();
-    window.formView = new drillDownFormView();
-    window.front = new appController(mapView);
-
-    states.map(setup);
     new modal("title");
-    renderDrillDownForm();
+
+    window.front.setMap(window.mapView);
 }
 </script>
